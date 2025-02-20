@@ -1,17 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 class IMemberPayload {
   final String username;
   final String password; // Hash แล้ว
   final String name;
   final File image;
+  final Uint8List? bytes;
 
   IMemberPayload({
     required this.username,
     required this.password,
     required this.name,
     required this.image,
+    this.bytes,
   });
 
   // ✅ Convert Model เป็น JSON

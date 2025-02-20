@@ -37,6 +37,7 @@ class LoginController {
     } on NetworkException catch (e) {
       AppToastFailedDialog(message: e.data.toString());
     } catch (e) {
+      print("error $e");
       AppToastFailedDialog(message: "เกิดข้อผิดพลาดทางระบบ");
     }
   }

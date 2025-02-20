@@ -29,3 +29,19 @@ class CustomerResponse with _$CustomerResponse {
   factory CustomerResponse.fromJson(Map<String, dynamic> json) =>
       _$CustomerResponseFromJson(json);
 }
+
+
+class ICustomerPayload {
+  final String name;
+  final String phoneNumber;
+  final String allMemberNumber;
+  final String address;
+
+  ICustomerPayload({
+    required this.name,
+    required this.phoneNumber,
+    required this.allMemberNumber,
+    required this.address,
+  });
+
+}

@@ -10,23 +10,19 @@ import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/controller/main_controller.dart';
 
 class ImageUploadWidget extends HookConsumerWidget {
-  final void Function((File, String))? callback;
+  final void Function(UploadFileResponse?)? callback;
   const ImageUploadWidget({super.key, required this.callback});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ValueNotifier<File?> imageFile = useState(null);
-    ValueNotifier<String?> base64String = useState(null);
+    ValueNotifier<UploadFileResponse?> imageFile = useState(null);
     return Stack(
       children: [
         InkWell(
           onTap: () async {
-            final (File? file, String? base64) = await ref.read(mainControllerProvider).uploadImage();
-            if (file != null && base64 != null) {
-              imageFile.value = file;
-              base64String.value = base64;
-              callback?.call((file, base64));
-            }
+            final res = await ref.read(mainControllerProvider).uploadImage();
+            imageFile.value = res;
+            callback?.call(res);
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
@@ -41,7 +37,7 @@ class ImageUploadWidget extends HookConsumerWidget {
                         style: context.textTheme.bodySmall?.apply(color: context.appColors.subTitle),
                       ))
                     : Image.memory(
-                        base64Decode(base64String.value!),
+                        base64Decode(imageFile.value?.base64 ?? ""),
                         fit: BoxFit.cover,
                         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                           if (frame == null) {

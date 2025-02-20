@@ -1,10 +1,26 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'product_model.freezed.dart';
 part 'product_model.g.dart';
 
 
+class IProductPayload {
+  final String name;
+  final num price;
+  final File image;
+  final Uint8List? bytes;
 
+  IProductPayload({
+    required this.name,
+    required this.price,
+    required this.image,
+    this.bytes,
+  });
+
+}
 
 @freezed
 class ResponseProductModel with _$ResponseProductModel {

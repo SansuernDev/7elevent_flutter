@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get_utils/src/extensions/export.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/constant/constant.dart';
@@ -18,10 +19,13 @@ import 'package:sevent_elevent/core/state/user_state.dart';
 import 'package:sevent_elevent/core/utils/number.dart';
 import 'package:sevent_elevent/core/widgets/app_button.dart';
 import 'package:sevent_elevent/core/widgets/app_text_field.dart';
+import 'package:sevent_elevent/core/widgets/image_upload_widget.dart';
 import 'package:sevent_elevent/core/widgets/text_loading_paginate.dart';
 import 'package:sevent_elevent/feature/market/market_product_card.dart';
 import 'package:sevent_elevent/gen/assets.gen.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
+import '../../core/routes.dart';
 
 class MarketPanel extends HookConsumerWidget {
   const MarketPanel({super.key});
@@ -53,7 +57,15 @@ class MarketPanel extends HookConsumerWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                        useSafeArea: true,
+                        context: context,
+                        builder: (context) {
+                          return CustomerCreateDialog();
+                        },
+                      );
+                    },
                     child: Text(
                       "+ เพิ่มรายชื่อใหม่",
                       style: context.textTheme.bodyLarge?.copyWith(color: context.appColors.primary),
@@ -355,6 +367,124 @@ class EmptySearch extends StatelessWidget {
           ),
         ],
       )),
+    );
+  }
+}
+
+
+class CustomerCreateDialog extends HookConsumerWidget {
+  const CustomerCreateDialog({super.key});
+
+  @override
+  Widget build(BuildContext context,WidgetRef ref) {
+    ValueNotifier<UploadFileResponse?> imageFile = useState(null);
+    final nameController = useTextEditingController();
+    final phoneController = useTextEditingController();
+    final phoneAllMemberController = useTextEditingController();
+    final addressController = useTextEditingController();
+
+    return Dialog(
+      insetPadding: const EdgeInsets.all(16),
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 400),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Gap(12),
+            AppTextField(
+              label: "ชื่อ-สกุล",
+              hintText: 'ชื่อ-สกุล',
+              controller: nameController,
+            ),
+            Gap(12),
+            AppTextField(
+              label: "เบอร์โทรศัพท์",
+              hintText: 'เบอร์โทรศัพท์',
+              controller: phoneController,
+              textInputType: TextInputType.number,
+            ),
+            Gap(12),
+            AppTextField(
+              label: "เบอร์ All member",
+              hintText: 'เบอร์ All member',
+              controller: phoneAllMemberController,
+              textInputType: TextInputType.number,
+            ),
+            Gap(12),
+            AppTextField(
+              label: "ที่อยู่",
+              hintText: 'ที่อยู่',
+              controller: addressController,
+            ),
+            Gap(40),
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    backgroundColor: Color(0xFF636363),
+                    textColor: Colors.white,
+                    width: 380,
+                    height: 42,
+                    onPressed: () {
+                      rootContext()!.pop();
+                    },
+                    text: "ย้อนกลับ",
+                  ),
+                ),
+                Gap(14),
+                Expanded(
+                  child: HookBuilder(
+                    builder: (context) {
+                      final nameText = useListenableSelector(
+                        nameController,
+                            () => nameController.text,
+                      );
+                      final phone = useListenableSelector(
+                        phoneController,
+                            () => phoneController.text,
+                      );
+                      final allmember = useListenableSelector(
+                        phoneAllMemberController,
+                            () => phoneAllMemberController.text,
+                      );
+                      final address = useListenableSelector(
+                        addressController,
+                            () => addressController.text,
+                      );
+
+
+                      final enable = nameText.isNotEmpty && phone.isNotEmpty && allmember.isNotEmpty  && address.isNotEmpty ;
+                      return AppButton(
+                        enable: enable,
+                        backgroundColor: context.appColors.secondary,
+                        textColor: Colors.white,
+                        width: 380,
+                        height: 42,
+                        onPressed: () {
+                          if (!enable) return;
+                          ref.read(mainControllerProvider).createCustomer(ICustomerPayload(
+                            name: nameText,
+                            phoneNumber: phone,
+                            allMemberNumber: allmember,
+                            address: address
+                          ));
+                        },
+                        text: "สร้างสินค้า",
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

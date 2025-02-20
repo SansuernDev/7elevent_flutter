@@ -7,6 +7,8 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(child: Text("หน้านี้ยังไม่พร้อมใช้งาน")),
+    );
   }
 }

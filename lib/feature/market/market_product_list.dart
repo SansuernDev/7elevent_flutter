@@ -6,12 +6,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get_common/get_reset.dart';
 import 'package:get/get_utils/src/extensions/export.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sevent_elevent/core/app_loading.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/constant/constant.dart';
+import 'package:sevent_elevent/core/controller/main_controller.dart';
 import 'package:sevent_elevent/core/model/market_model.dart';
 import 'package:sevent_elevent/core/model/paginated_status.dart';
+import 'package:sevent_elevent/core/model/product_model.dart';
+import 'package:sevent_elevent/core/routes.dart';
 import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
 import 'package:sevent_elevent/core/state/market_state.dart';
 import 'package:sevent_elevent/core/widgets/app_button.dart';
@@ -29,8 +33,6 @@ class MarketProductList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController();
-    final nameController = useTextEditingController();
-    final priceController = useTextEditingController();
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -67,105 +69,11 @@ class MarketProductList extends HookConsumerWidget {
                 width: 200,
                 height: 42,
                 onPressed: () {
-                  nameController.text = "";
-                  priceController.text = "";
                   showDialog(
                     useSafeArea: true,
                     context: context,
                     builder: (context) {
-                      return HookBuilder(
-                        builder: (context) {
-                          ValueNotifier<File?> imageFile = useState(null);
-                          return Dialog(
-                            insetPadding: const EdgeInsets.all(16),
-                            child: Container(
-                              constraints: BoxConstraints(maxWidth: 400),
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ImageUploadWidget(
-                                    callback: (value) {
-                                      final (File f, String b) = value;
-                                      imageFile.value = f;
-                                    },
-                                  ),
-                                  Gap(12),
-                                  AppTextField(
-                                    label: "ชื่อสินค้า",
-                                    hintText: 'ชื่อสินค้า',
-                                    controller: nameController,
-                                  ),
-                                  Gap(12),
-                                  AppTextField(
-                                    label: "ราคา",
-                                    hintText: 'ราคา',
-                                    controller: priceController,
-                                  ),
-                                  Gap(40),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AppButton(
-                                          backgroundColor: Color(0xFF636363),
-                                          textColor: Colors.white,
-                                          width: 380,
-                                          height: 42,
-                                          onPressed: () {
-                                            // setState(() {
-                                            //   nameController.text = "";
-                                            //   passwordController.text = "";
-                                            //   memberIdController.text = "";
-                                            //   imageFile = null;
-                                            //   base64String = null;
-                                            //   isLogin = !isLogin;
-                                            // });
-                                          },
-                                          text: "ย้อนกลับ",
-                                        ),
-                                      ),
-                                      Gap(14),
-                                      Expanded(
-                                        child: HookBuilder(
-                                          builder: (context) {
-                                            final nameText = useListenableSelector(
-                                              nameController,
-                                              () => nameController.text,
-                                            );
-                                            final passwordText = useListenableSelector(
-                                              priceController,
-                                              () => priceController.text,
-                                            );
-
-                                            final enable = nameText.isNotEmpty && passwordText.isNotEmpty && imageFile.value != null;
-                                            return AppButton(
-                                              enable: enable,
-                                              backgroundColor: context.appColors.secondary,
-                                              textColor: Colors.white,
-                                              width: 380,
-                                              height: 42,
-                                              onPressed: () {
-
-                                              },
-                                              text: "สร้างสินค้า",
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                      ;
+                      return ProductCreateDialog();
                     },
                   );
                 },
@@ -241,4 +149,111 @@ class MarketProductList extends HookConsumerWidget {
       ),
     );
   }
+
 }
+
+
+class ProductCreateDialog extends HookConsumerWidget {
+  const ProductCreateDialog({super.key});
+
+  @override
+  Widget build(BuildContext context,WidgetRef ref) {
+    ValueNotifier<UploadFileResponse?> imageFile = useState(null);
+    final nameController = useTextEditingController();
+    final priceController = useTextEditingController();
+    return Dialog(
+      insetPadding: const EdgeInsets.all(16),
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 400),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ImageUploadWidget(
+              callback: (value) {
+                imageFile.value = value;
+              },
+            ),
+            Gap(12),
+            AppTextField(
+              label: "ชื่อสินค้า",
+              hintText: 'ชื่อสินค้า',
+              controller: nameController,
+            ),
+            Gap(12),
+            AppTextField(
+              label: "ราคา",
+              hintText: 'ราคา',
+              controller: priceController,
+              textInputType: TextInputType.number,
+            ),
+            Gap(40),
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    backgroundColor: Color(0xFF636363),
+                    textColor: Colors.white,
+                    width: 380,
+                    height: 42,
+                    onPressed: () {
+                      rootContext()?.pop();
+                    },
+                    text: "ย้อนกลับ",
+                  ),
+                ),
+                Gap(14),
+                Expanded(
+                  child: HookBuilder(
+                    builder: (context) {
+                      final nameText = useListenableSelector(
+                        nameController,
+                            () => nameController.text,
+                      );
+                      final price = useListenableSelector(
+                        priceController,
+                            () => priceController.text,
+                      );
+
+                      final image = useListenableSelector(
+                        imageFile,
+                            () => imageFile.value,
+                      );
+
+                      final enable = nameText.isNotEmpty && price.isNotEmpty && image != null;
+                      return AppButton(
+                        enable: enable,
+                        backgroundColor: context.appColors.secondary,
+                        textColor: Colors.white,
+                        width: 380,
+                        height: 42,
+                        onPressed: () {
+                          if (!enable) return;
+                          ref.read(mainControllerProvider).createProduct(IProductPayload(
+                            price: num.tryParse(price) ?? 0,
+                            name: nameText,
+                            image: imageFile.value!.file!,
+                            bytes: imageFile.value?.bytes,
+                          ));
+                        },
+                        text: "สร้างสินค้า",
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+

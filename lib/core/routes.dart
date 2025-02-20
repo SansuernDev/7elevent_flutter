@@ -67,8 +67,8 @@ final router = GoRouter(
       path: '/login',
       name: 'login',
       builder: (context, state) => const AppAnnotatedRegionOverlay.light(child: LoginScreen()),
-      routes: [
-      ],
+      routes: [],
     ),
+
   ],
 );
