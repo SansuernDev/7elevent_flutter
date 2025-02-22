@@ -244,7 +244,7 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
                                             height: 42,
                                             onPressed: () {
                                               Uint8List? bytes = imageFile?.bytes;
-                                              final payload = IMemberPayload(name: nameText, password: passwordText, username: usernameText, image: imageFile!.file!, bytes: bytes);
+                                              final payload = IMemberPayload(name: nameText, password: passwordText, username: usernameText, image: imageFile?.file, bytes: bytes);
                                               ref.read(loginControllerProvider).register(payload);
                                             },
                                             text: "สมัครสมาชิก",

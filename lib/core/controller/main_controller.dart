@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sevent_elevent/core/constant/constant.dart';
 import 'package:sevent_elevent/core/datasource/main_datasource.dart';
@@ -17,6 +16,7 @@ import 'package:sevent_elevent/core/routes.dart';
 import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
 import 'package:sevent_elevent/core/state/market_state.dart';
 import 'package:sevent_elevent/core/widgets/app_toast.dart';
+
 part 'main_controller.g.dart';
 
 class UploadFileResponse {
@@ -39,21 +39,18 @@ class MainController {
   Future<UploadFileResponse?> uploadImage() async {
     try {
       if (kIsWeb) {
-        // ✅ Web: ใช้ file_picker
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-          withData: true,
+        Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+        if (bytesFromPicker == null) return null;
+
+        String encodedBase64 = base64Encode(bytesFromPicker);
+
+        return UploadFileResponse(
+          file: null,
+          base64: encodedBase64,
+          bytes: bytesFromPicker,
         );
-
-        if (result != null && result.files.isNotEmpty) {
-          Uint8List bytes = result.files.first.bytes!;
-          XFile file = XFile.fromData(bytes, name: result.files.first.name);
-          String encodedBase64 = base64Encode(bytes);
-          File originalFile = File(file.path);
-
-          return UploadFileResponse(file: originalFile, base64: encodedBase64, bytes: bytes);
-        }
       }
+
 
       final ImagePicker picker = ImagePicker();
       final ImageSource? source = await showSelectorBottomSheet();

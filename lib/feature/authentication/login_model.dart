@@ -7,14 +7,14 @@ class IMemberPayload {
   final String username;
   final String password; // Hash แล้ว
   final String name;
-  final File image;
+  final File? image;
   final Uint8List? bytes;
 
   IMemberPayload({
     required this.username,
     required this.password,
     required this.name,
-    required this.image,
+    this.image,
     this.bytes,
   });
 
@@ -24,7 +24,7 @@ class IMemberPayload {
       'username': username,
       'password': password,
       'name': name,
-      'image': base64Encode(image.readAsBytesSync()), // แปลงรูปเป็น Base64
+      'image': image != null ? base64Encode(image!.readAsBytesSync()) : null, // แปลงรูปเป็น Base64
     };
   }
 
