@@ -149,15 +149,13 @@ class MarketProductList extends HookConsumerWidget {
       ),
     );
   }
-
 }
-
 
 class ProductCreateDialog extends HookConsumerWidget {
   const ProductCreateDialog({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ValueNotifier<UploadFileResponse?> imageFile = useState(null);
     final nameController = useTextEditingController();
     final priceController = useTextEditingController();
@@ -213,16 +211,16 @@ class ProductCreateDialog extends HookConsumerWidget {
                     builder: (context) {
                       final nameText = useListenableSelector(
                         nameController,
-                            () => nameController.text,
+                        () => nameController.text,
                       );
                       final price = useListenableSelector(
                         priceController,
-                            () => priceController.text,
+                        () => priceController.text,
                       );
 
                       final image = useListenableSelector(
                         imageFile,
-                            () => imageFile.value,
+                        () => imageFile.value,
                       );
 
                       final enable = nameText.isNotEmpty && price.isNotEmpty && image != null;
@@ -235,11 +233,11 @@ class ProductCreateDialog extends HookConsumerWidget {
                         onPressed: () {
                           if (!enable) return;
                           ref.read(mainControllerProvider).createProduct(IProductPayload(
-                            price: num.tryParse(price) ?? 0,
-                            name: nameText,
-                            image: imageFile.value!.file!,
-                            bytes: imageFile.value?.bytes,
-                          ));
+                                price: num.tryParse(price) ?? 0,
+                                name: nameText,
+                                image: imageFile.value?.file,
+                                bytes: imageFile.value?.bytes,
+                              ));
                         },
                         text: "สร้างสินค้า",
                       );
@@ -254,6 +252,3 @@ class ProductCreateDialog extends HookConsumerWidget {
     );
   }
 }
-
-
-

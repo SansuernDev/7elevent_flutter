@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +8,6 @@ import 'package:sevent_elevent/core/model/customer_model.dart';
 import 'package:sevent_elevent/core/model/market_model.dart';
 import 'package:sevent_elevent/core/model/product_model.dart';
 import 'package:sevent_elevent/core/network_manager.dart';
-import 'package:sevent_elevent/feature/authentication/login_model.dart';
 
 part 'main_datasource.g.dart';
 
@@ -70,16 +68,8 @@ class MainDataSource {
   }
 
   Future createCustomer(ICustomerPayload payload) {
-    return networkManager.post(
-      '/customer',
-      appBaseUrl: baseUrl,
-      data: {
-        "name": payload.name,
-        "phone_number": payload.phoneNumber,
-        "allmember_number": payload.allMemberNumber,
-        "address": payload.address
-      }
-    );
+    return networkManager.post('/customer',
+        appBaseUrl: baseUrl, data: {"name": payload.name, "phone_number": payload.phoneNumber, "allmember_number": payload.allMemberNumber, "address": payload.address});
   }
 
   Future productCreate({required IProductPayload payload}) async {
@@ -94,7 +84,7 @@ class MainDataSource {
     } else {
       // ✅ Mobile/Desktop: ใช้ `fromFile()`
       imageFile = await MultipartFile.fromFile(
-        payload.image.path,
+        payload.image?.path ?? "",
         filename: "$timestamp.jpg",
         contentType: MediaType('image', 'jpeg'),
       );

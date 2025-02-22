@@ -10,13 +10,13 @@ part 'product_model.g.dart';
 class IProductPayload {
   final String name;
   final num price;
-  final File image;
+  final File? image;
   final Uint8List? bytes;
 
   IProductPayload({
     required this.name,
     required this.price,
-    required this.image,
+     this.image,
     this.bytes,
   });
 
