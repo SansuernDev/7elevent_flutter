@@ -203,7 +203,7 @@ class MemberScreen extends HookConsumerWidget {
                                               Container(
                                                 width: 160,
                                                 padding: EdgeInsets.all(8),
-                                                child: Text(getDateAndTimeStringFormatted(query.createdAt), style: TextStyle(fontWeight: FontWeight.bold)),
+                                                child: Text(getDateAndTimeStringFormatted(query.createdAt ?? DateTime.now()), style: TextStyle(fontWeight: FontWeight.bold)),
                                               ),
                                             ],
                                           ),
