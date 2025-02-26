@@ -5,6 +5,7 @@ import 'package:sevent_elevent/core/widgets/screen_tabbar.dart';
 import 'package:sevent_elevent/feature/authentication/login_screen.dart';
 import 'package:sevent_elevent/feature/home/home_screen.dart';
 import 'package:sevent_elevent/feature/market/market_screen.dart';
+import 'package:sevent_elevent/feature/member/member_screen.dart';
 import 'package:sevent_elevent/feature/order/order_screen.dart';
 
 
@@ -56,6 +57,17 @@ final router = GoRouter(
               path: '/order',
               name: 'order',
               builder: (context, state) => const AppAnnotatedRegionOverlay.light(child: OrderScreen()),
+              routes: [
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: <RouteBase>[
+            GoRoute(
+              path: '/member',
+              name: 'member',
+              builder: (context, state) => const AppAnnotatedRegionOverlay.light(child:  MemberScreen()),
               routes: [
               ],
             ),

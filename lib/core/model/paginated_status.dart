@@ -5,5 +5,6 @@ part 'paginated_status.freezed.dart';
 abstract class PaginatedStatus with _$PaginatedStatus {
   const factory PaginatedStatus.done() = _Done;
   const factory PaginatedStatus.fetchingMore() = _FetchingMore;
+  const factory PaginatedStatus.noMore() = _NoMore;
   const factory PaginatedStatus.error(Object? e,[StackTrace? stack]) = _Error;
 }

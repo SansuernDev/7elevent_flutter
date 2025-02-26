@@ -59,54 +59,67 @@ class _TabBarScreenState extends ConsumerState<ScreenTabBar> {
                   child: Consumer(
                     builder: (context, ref, child) {
                       ref.watch(userStateProvider);
+                      final double padding = 12;
                       return NavigationRail(
                         selectedIndex: selectedIndex,
                         onDestinationSelected: _onItemTapped,
                         selectedLabelTextStyle: context.textTheme.bodySmall,
                         unselectedLabelTextStyle: context.textTheme.bodySmall,
-                        labelType: NavigationRailLabelType.selected,
+                        labelType: NavigationRailLabelType.all,
                         indicatorColor: context.appColors.primary,
                         selectedIconTheme: IconThemeData(color: Colors.white),
                         unselectedIconTheme: IconThemeData(color: Color(0xFF636363)),
-                        indicatorShape: const CircleBorder(),
-                        minWidth: 100,
+                        indicatorShape:  CircleBorder(
+                        ),
+                        minWidth: 120,
                         useIndicator: true,
                         backgroundColor: Color(0xFFFEFFFF),
                         destinations: [
                           NavigationRailDestination(
-                            icon: Icon(
-                              Icons.home_outlined,
-                              size: 24,
-                            ),
-                            selectedIcon: Icon(
-                              Icons.home_outlined,
-                              size: 18,
-                            ),
-                            label: Text("หน้าแรก"),
-                          ),
+                              icon: Icon(
+                                Icons.home_outlined,
+                                size: 24,
+                              ),
+                              selectedIcon: Icon(
+                                Icons.home_filled,
+                                size: 18,
+                              ),
+                              label: Text("หน้าแรก"),
+                              padding: EdgeInsets.all(padding)),
                           if (SharedPrefs().isAuthentication()) ...[
                             NavigationRailDestination(
-                              icon: Icon(
-                                Icons.shopping_cart_outlined,
-                                size: 24,
-                              ),
-                              selectedIcon: Icon(
-                                Icons.shopping_cart_outlined,
-                                size: 18,
-                              ),
-                              label: Text("ตะกร้า"),
-                            ),
+                                icon: Icon(
+                                  Icons.shopping_cart_outlined,
+                                  size: 24,
+                                ),
+                                selectedIcon: Icon(
+                                  Icons.shopping_cart_rounded,
+                                  size: 18,
+                                ),
+                                label: Text("ตะกร้า"),
+                                padding: EdgeInsets.all(padding)),
                             NavigationRailDestination(
-                              icon: Icon(
-                                Icons.history_outlined,
-                                size: 24,
-                              ),
-                              selectedIcon: Icon(
-                                Icons.history_outlined,
-                                size: 18,
-                              ),
-                              label: Text("ประวัติการสั่งซื้อ"),
-                            ),
+                                icon: Icon(
+                                  Icons.history_outlined,
+                                  size: 24,
+                                ),
+                                selectedIcon: Icon(
+                                  Icons.history_rounded,
+                                  size: 18,
+                                ),
+                                label: Text("ประวัติการสั่งซื้อ"),
+                                padding: EdgeInsets.all(padding)),
+                            NavigationRailDestination(
+                                icon: Icon(
+                                  Icons.groups_outlined,
+                                  size: 24,
+                                ),
+                                selectedIcon: Icon(
+                                  Icons.groups_rounded,
+                                  size: 18,
+                                ),
+                                label: Text("รายชื่อสมาชิก"),
+                                padding: EdgeInsets.all(padding)),
                           ] else
                             NavigationRailDestination(
                               icon: SizedBox.shrink(), // Invisible icon

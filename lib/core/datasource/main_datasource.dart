@@ -1,6 +1,6 @@
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sevent_elevent/core/constant/constant.dart';
@@ -8,8 +8,10 @@ import 'package:sevent_elevent/core/model/customer_model.dart';
 import 'package:sevent_elevent/core/model/market_model.dart';
 import 'package:sevent_elevent/core/model/product_model.dart';
 import 'package:sevent_elevent/core/network_manager.dart';
+import 'package:sevent_elevent/core/type/main_type.dart';
 
 part 'main_datasource.g.dart';
+
 
 @Riverpod(keepAlive: true)
 MainDataSource mainDataSource(MainDataSourceRef ref) {
@@ -34,6 +36,37 @@ class MainDataSource {
     );
   }
 
+  Future getOrders({
+    required num page,
+    required num limit,
+    required String phrase,
+  }) {
+    return networkManager.get(
+      '/order?page=$page&limit=$limit&phrase=$phrase',
+      appBaseUrl: baseUrl,
+    );
+  }
+
+  Future getMembers({
+    required num page,
+    required num limit,
+    required String phrase,
+  }) {
+    return networkManager.get(
+      '/member?page=$page&limit=$limit&phrase=$phrase',
+      appBaseUrl: baseUrl,
+    );
+  }
+
+  Future getTopPointMembers({
+    required Period period,
+  }) {
+    return networkManager.get(
+      '/member/top/point?period=${period.name}',
+      appBaseUrl: baseUrl,
+    );
+  }
+
   Future getCustomer({
     required num page,
     required num limit,
@@ -41,6 +74,36 @@ class MainDataSource {
   }) {
     return networkManager.get(
       '/customer?page=$page&limit=$limit&phrase=$phrase',
+      appBaseUrl: baseUrl,
+    );
+  }
+
+  Future getCustomerWithProduct({
+    required String customerId,
+
+  }) {
+    return networkManager.get(
+      '/customer/product/$customerId',
+      appBaseUrl: baseUrl,
+    );
+  }
+
+
+
+  Future getMemberById({
+    required String memberId,
+  }) {
+    return networkManager.get(
+      '/member/$memberId',
+      appBaseUrl: baseUrl,
+    );
+  }
+
+  Future removeOrder({
+    required String orderId,
+  }) {
+    return networkManager.delete(
+      '/order/$orderId',
       appBaseUrl: baseUrl,
     );
   }
@@ -56,16 +119,7 @@ class MainDataSource {
     );
   }
 
-  Future getCustomerWithProduct({
-    required num page,
-    required num limit,
-    required String phrase,
-  }) {
-    return networkManager.get(
-      '/customer?page=$page&limit=$limit&phrase=$phrase',
-      appBaseUrl: baseUrl,
-    );
-  }
+
 
   Future createCustomer(ICustomerPayload payload) {
     return networkManager.post('/customer',

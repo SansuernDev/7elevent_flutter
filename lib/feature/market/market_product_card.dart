@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get_utils/src/extensions/export.dart';
@@ -7,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/utils/number.dart';
 import 'package:sevent_elevent/core/widgets/animation_button.dart';
+import 'package:sevent_elevent/feature/authentication/login_screen.dart';
 import 'package:sevent_elevent/gen/assets.gen.dart';
 
 class MarketProductCard extends StatelessWidget {
@@ -107,47 +109,54 @@ class MarketProductCard extends StatelessWidget {
 
 
 class MarketProductHit extends StatelessWidget {
-  const MarketProductHit({super.key});
+  final String imageUrl;
+  final String name;
+  final num price;
+  final void Function() onTap;
+  const MarketProductHit({super.key, required this.imageUrl, required this.name, required this.price,required this.onTap });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          width: 1,
-          color: context.appColors.border,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        constraints: BoxConstraints(
+          minWidth: 200
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            width: 1,
+            color: context.appColors.border,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                image: imageUrl.isEmpty
+                    ? null
+                    : DecorationImage(
+                  image: CachedNetworkImageProvider(imageUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
-              image: "".isEmpty
-                  ? null
-                  : DecorationImage(
-                image: CachedNetworkImageProvider(""),
-                fit: BoxFit.cover,
-              ),
+              child: MyAssets.images.allmember.image(fit: BoxFit.cover),
             ),
-            child: MyAssets.images.allmember.image(fit: BoxFit.cover),
-          ),
-          Gap(4),
-          Text(
-            "ฟีเจอร์นี้กำลังจะมาในเร็วๆนี้",
-            style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
-          ),
-        ],
+            Gap(8),
+            Text(
+              name,
+              style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -247,65 +256,81 @@ class MarketProductCardSelect extends HookConsumerWidget {
             ),
           ],
         ),
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              width: 1,
-              color: context.appColors.border,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                  image: imageUrl.isEmpty
-                      ? null
-                      : DecorationImage(
-                    image: CachedNetworkImageProvider(imageUrl),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                // child: MyAssets.images.allmember.image(fit: BoxFit.cover),
-              ),
-              Gap(12),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "$amount x $name",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.textTheme.bodyLarge,
-                    ),
-                    Text(
-                      "฿ ${formatNumberToPrice(price)}",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
+        child: ProductCardSelected(
+          amount: amount,
+          imageUrl: imageUrl,
+          price: price,
+          name: name,
         ),
       ),
     );
   }
 }
+
+class ProductCardSelected extends StatelessWidget {
+  final String imageUrl;
+  final String name;
+  final num price;
+  final num amount;
+  const ProductCardSelected({super.key, required this.imageUrl, required this.name, required this.price, required this.amount});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          width: 1,
+          color: context.appColors.border,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              image: imageUrl.isEmpty
+                  ? null
+                  : DecorationImage(
+                image: CachedNetworkImageProvider(imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+            // child: MyAssets.images.allmember.image(fit: BoxFit.cover),
+          ),
+          Gap(12),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "$amount x $name",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.textTheme.bodyLarge,
+                ),
+                Text(
+                  "฿ ${formatNumberToPrice(price)}",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 String mobileNumberDisplayText({
   required String mobileNumber,

@@ -15,9 +15,23 @@ class TextLoadingPaginate extends HookConsumerWidget {
     return state.when(
       done: () => SizedBox(),
       fetchingMore: () => AppLoadingText(),
-      error: (e, stack) => Text(
-        "โหลดข้อมูลไม่สำเร็จ",
-        style: context.textTheme.bodySmall?.apply(color: context.appColors.subTitle),
+      noMore: () => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            "ไม่มีข้อมูลเพิ่มเติม",
+            style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
+          ),
+        ),
+      ),
+      error: (e, stack) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            "โหลดข้อมูลไม่สำเร็จ",
+            style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
+          ),
+        ),
       ),
     );
   }

@@ -14,17 +14,13 @@ part 'user_state.g.dart';
 @Riverpod(keepAlive: true)
 class UserState extends _$UserState {
   @override
-  UserModel? build() {
-    //TODO:get recent user
-    // ref.listenSelf((previous, next) {
-    //   if (next != null) {
-    //     ref.read(mainDataSourceProvider).
-    //   }
-    // },);
-    return SharedPrefs().getTokenData;
+  Future<UserModel?> build() async {
+    final UserModel? data = SharedPrefs().getTokenData;
+    final res = await ref.watch(mainDataSourceProvider).getMemberById(memberId: data?.memberId ?? "");
+    return UserModel.fromJson(res);
   }
 
   void setUser(UserModel user) {
-    state = user;
+    state = AsyncData(user);
   }
 }

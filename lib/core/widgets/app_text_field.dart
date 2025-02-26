@@ -165,7 +165,7 @@ class AppTextField extends StatelessWidget {
                 ),
             filled: true,
             counterText: buildCounter != null ? null : "",
-            fillColor: fillColor ?? Colors.transparent,
+            fillColor: fillColor ?? Colors.white,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),
               borderSide: BorderSide(

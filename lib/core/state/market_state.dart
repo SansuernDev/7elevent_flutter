@@ -6,6 +6,7 @@ import 'package:sevent_elevent/core/datasource/main_datasource.dart';
 import 'package:sevent_elevent/core/model/customer_model.dart';
 import 'package:sevent_elevent/core/model/market_model.dart';
 import 'package:sevent_elevent/core/model/product_model.dart';
+import 'package:sevent_elevent/core/model/user_model.dart';
 import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
 
 part 'market_state.g.dart';
@@ -44,6 +45,26 @@ class CustomerSelectState extends _$CustomerSelectState {
   }
 }
 
+@riverpod
+class CustomerProductTopBuyState extends _$CustomerProductTopBuyState {
+  @override
+  Future<List<ProductModel>> build() async {
+    final customer = ref.watch(customerSelectStateProvider);
+    if ((customer?.customerId ?? "").isNotEmpty) {
+      final response = await ref.read(mainDataSourceProvider).getCustomerWithProduct(customerId: customer?.customerId ?? "");
+      return (response as List).map((e) => ProductModel.fromJson(e),).toList();
+    }
+    return [];
+  }
+
+  clear() {
+    state = AsyncData([]);
+  }
+}
+
+
+
+
 @Riverpod(keepAlive: true)
 class MarketProductSelectState extends _$MarketProductSelectState {
   @override
@@ -76,10 +97,10 @@ class MarketProductSelectState extends _$MarketProductSelectState {
   }
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 class MarketProductListState extends _$MarketProductListState {
   num _page = 0;
-  final num _limit = 10;
+  final num _limit = 20;
   @override
   Future<List<ProductModel>> build() async {
     ref.onDispose(() {
@@ -100,6 +121,8 @@ class MarketProductListState extends _$MarketProductListState {
 
     if (requestMoreData && pageToRequest > _page) {
       _getMoreData();
+    } else {
+      ref.read(bottomPaginatedIndicatorProvider(key: marketProductListState).notifier).showNoMoreFetching();
     }
   }
 
@@ -119,7 +142,7 @@ class MarketProductListState extends _$MarketProductListState {
   }
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 class MarketCustomerListState extends _$MarketCustomerListState {
   num _page = 0;
   final num _limit = 10;
@@ -146,6 +169,8 @@ class MarketCustomerListState extends _$MarketCustomerListState {
 
     if (requestMoreData && pageToRequest > _page) {
       _getMoreData();
+    } else {
+      ref.read(bottomPaginatedIndicatorProvider(key: marketCustomerListState).notifier).showNoMoreFetching();
     }
   }
 
@@ -163,3 +188,93 @@ class MarketCustomerListState extends _$MarketCustomerListState {
     }
   }
 }
+
+
+
+
+@riverpod
+class OrderListState extends _$OrderListState {
+  num _page = 0;
+  final num _limit = 20;
+  @override
+  Future<List<OrderModel>> build() async {
+    ref.onDispose(() {
+      _page = 0;
+      ref.invalidate(bottomPaginatedIndicatorProvider(key: orderListState));
+    });
+
+    final String phrase = ref.watch(marketSearchStateProvider(key: orderListState));
+    final response = await ref.watch(mainDataSourceProvider).getOrders(page: _page, limit: _limit, phrase: phrase);
+    final data = (response['data'] as List).map((e) => OrderModel.fromJson(e),).toList();
+    return data;
+  }
+
+  void checkRequestMoreData(int index) {
+    final itemPosition = index + 1;
+    final requestMoreData = itemPosition % 8 == 0 && index != 0;
+    final pageToRequest = itemPosition ~/ 8;
+
+    if (requestMoreData && pageToRequest > _page) {
+      _getMoreData();
+    }
+  }
+
+  Future<void> _getMoreData() async {
+    try {
+      ref.read(bottomPaginatedIndicatorProvider(key: orderListState).notifier).showLoading();
+      _page = _page + 1;
+      final String phrase = ref.watch(marketSearchStateProvider(key: orderListState));
+      final response = await ref.watch(mainDataSourceProvider).getOrders(page: _page, limit: _limit, phrase: phrase);
+      final data = (response['data'] as List).map((e) => OrderModel.fromJson(e),).toList();
+      state = AsyncData([...state.value!, ...data]);
+      ref.read(bottomPaginatedIndicatorProvider(key: orderListState).notifier).hideLoading();
+    } catch (e) {
+      ref.read(bottomPaginatedIndicatorProvider(key: orderListState).notifier).showError(e);
+    }
+  }
+}
+
+
+@riverpod
+class MemberListState extends _$MemberListState {
+  num _page = 0;
+  final num _limit = 20;
+  @override
+  Future<List<UserModel>> build() async {
+    ref.onDispose(() {
+      _page = 0;
+      ref.invalidate(bottomPaginatedIndicatorProvider(key: memberListState));
+    });
+
+    final String phrase = ref.watch(marketSearchStateProvider(key: memberListState));
+    final response = await ref.watch(mainDataSourceProvider).getMembers(page: _page, limit: _limit, phrase: phrase);
+    final data = (response['data'] as List).map((e) => UserModel.fromJson(e),).toList();
+    return data;
+  }
+
+  void checkRequestMoreData(int index) {
+    final itemPosition = index + 1;
+    final requestMoreData = itemPosition % 8 == 0 && index != 0;
+    final pageToRequest = itemPosition ~/ 8;
+
+    if (requestMoreData && pageToRequest > _page) {
+      _getMoreData();
+    }
+  }
+
+  Future<void> _getMoreData() async {
+    try {
+      ref.read(bottomPaginatedIndicatorProvider(key: memberListState).notifier).showLoading();
+      _page = _page + 1;
+      final String phrase = ref.watch(marketSearchStateProvider(key: memberListState));
+      final response = await ref.watch(mainDataSourceProvider).getMembers(page: _page, limit: _limit, phrase: phrase);
+      final data = (response['data'] as List).map((e) => UserModel.fromJson(e),).toList();
+      state = AsyncData([...state.value!, ...data]);
+      ref.read(bottomPaginatedIndicatorProvider(key: memberListState).notifier).hideLoading();
+    } catch (e) {
+      ref.read(bottomPaginatedIndicatorProvider(key: memberListState).notifier).showError(e);
+    }
+  }
+}
+
+

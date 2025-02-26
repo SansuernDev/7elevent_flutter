@@ -27,12 +27,7 @@ class MarketScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-
-      appBar: DefaultAppBar(
-        useTap: false,
-        title: branchName,
-        trailing: UserProfileTrailing(),
-      ),
+      appBar: MainAppBar(),
       body: WrapBackground(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sevent_elevent/core/constant/constant.dart';
 import 'package:sevent_elevent/core/datasource/main_datasource.dart';
@@ -15,7 +15,9 @@ import 'package:sevent_elevent/core/network_manager.dart';
 import 'package:sevent_elevent/core/routes.dart';
 import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
 import 'package:sevent_elevent/core/state/market_state.dart';
+import 'package:sevent_elevent/core/state/user_state.dart';
 import 'package:sevent_elevent/core/widgets/app_toast.dart';
+import 'package:sevent_elevent/helper/image_picker_helper.dart';
 
 part 'main_controller.g.dart';
 
@@ -39,9 +41,8 @@ class MainController {
   Future<UploadFileResponse?> uploadImage() async {
     try {
       if (kIsWeb) {
-        Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+        Uint8List? bytesFromPicker = await pickImage();
         if (bytesFromPicker == null) return null;
-
         String encodedBase64 = base64Encode(bytesFromPicker);
 
         return UploadFileResponse(
@@ -73,20 +74,43 @@ class MainController {
 
   Future<void> createProduct(IProductPayload payload) async {
     try {
+      ref.read(appLoadingIndicatorProvider(key: createProductKey).notifier).showLoading();
       await ref.read(mainDataSourceProvider).productCreate(payload: payload);
       AppToastSuccessDialog(message: "สร้างสินค้าสำเร็จ");
       ref.invalidate(marketProductListStateProvider);
+      rootContext()?.pop();
+      ref.read(appLoadingIndicatorProvider(key: createProductKey).notifier).hideLoading();
+    } on NetworkException catch (e) {
+      ref.read(appLoadingIndicatorProvider(key: createProductKey).notifier).hideLoading();
+      AppToastFailedDialog(message: e.data.toString());
+    } catch (e) {
+      print("error $e");
+      ref.read(appLoadingIndicatorProvider(key: createProductKey).notifier).hideLoading();
+      AppToastFailedDialog(message: "เกิดข้อผิดพลาดทางระบบ");
+    }
+  }
+
+  Future<void> removeOrder( String orderId) async {
+    EasyLoading.show();
+    try {
+      await ref.read(mainDataSourceProvider).removeOrder(orderId: orderId);
+      AppToastSuccessDialog(message: "ลบออเดอร์สำเร็จ");
+      ref.invalidate(userStateProvider);
+      ref.invalidate(orderListStateProvider);
       rootContext()?.pop();
     } on NetworkException catch (e) {
       AppToastFailedDialog(message: e.data.toString());
     } catch (e) {
       print("error $e");
       AppToastFailedDialog(message: "เกิดข้อผิดพลาดทางระบบ");
+    } finally {
+      EasyLoading.dismiss();
     }
   }
 
   Future<void> createCustomer(ICustomerPayload payload) async {
     try {
+      ref.read(appLoadingIndicatorProvider(key: createCustomerKey).notifier).showLoading();
       final response = await ref.read(mainDataSourceProvider).createCustomer(payload);
       AppToastSuccessDialog(message: "เพิ่มรายชื่อใหม่สำเร็จ");
       rootContext()?.pop();
@@ -95,10 +119,12 @@ class MainController {
         await Future.delayed(Duration(seconds: 1));
         AppToastSuccessDialog(message: "ระบบเลือกรายชื่อลูกค้าใหม่อัติโนมัติ");
       }
+      ref.read(appLoadingIndicatorProvider(key: createCustomerKey).notifier).hideLoading();
     } on NetworkException catch (e) {
+      ref.read(appLoadingIndicatorProvider(key: createCustomerKey).notifier).showError(e);
       AppToastFailedDialog(message: e.data.toString());
     } catch (e) {
-      print("error $e");
+      ref.read(appLoadingIndicatorProvider(key: createCustomerKey).notifier).hideLoading();
       AppToastFailedDialog(message: "เกิดข้อผิดพลาดทางระบบ");
     }
   }
@@ -111,6 +137,8 @@ class MainController {
       AppToastSuccessDialog(message: "สร้างออเดอร์สำเร็จ");
       ref.invalidate(marketProductSelectStateProvider);
       ref.invalidate(customerSelectStateProvider);
+      ref.invalidate(orderListStateProvider);
+      ref.invalidate(userStateProvider);
       //TODO:reload user data & order data;
     } on NetworkException catch (e) {
       ref.read(appLoadingIndicatorProvider(key: marketSubmitFormKey).notifier).showError(e);

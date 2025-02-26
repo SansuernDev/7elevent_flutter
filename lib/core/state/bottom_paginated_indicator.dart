@@ -15,6 +15,12 @@ class BottomPaginatedIndicator extends _$BottomPaginatedIndicator {
     });
   }
 
+  void showNoMoreFetching() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      state = const PaginatedStatus.noMore();
+    });
+  }
+
   void showError(dynamic error) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       state = PaginatedStatus.error(error, StackTrace.empty);

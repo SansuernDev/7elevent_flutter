@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:sevent_elevent/core/app_theme.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/routes.dart';
@@ -45,6 +46,7 @@ void main() async {
   // ]);
   configLoading();
   await SharedPrefs().init();
+  await initializeDateFormatting('th', null);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,

@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
+import 'package:sevent_elevent/core/constant/constant.dart';
+import 'package:sevent_elevent/core/widgets/user_profile_trailing.dart';
+
+
+class MainAppBar extends DefaultAppBar {
+  const MainAppBar({super.key,  super.title = branchName});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultAppBar(
+      useTap: false,
+      title: branchName,
+      trailing: UserProfileTrailing(),
+    );
+  }
+}
 
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -41,7 +57,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               child:  Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

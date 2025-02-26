@@ -10,6 +10,7 @@ import 'package:sevent_elevent/core/share_prefs.dart';
 import 'package:sevent_elevent/core/state/user_state.dart';
 import 'package:sevent_elevent/core/utils/number.dart';
 import 'package:sevent_elevent/core/widgets/appbar.dart';
+import 'package:sevent_elevent/gen/assets.gen.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class UserProfileTrailing extends HookConsumerWidget {
@@ -17,7 +18,7 @@ class UserProfileTrailing extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final UserModel? user = ref.watch(userStateProvider);
+    final UserModel? user = ref.watch(userStateProvider).asData?.value;
     if (user == null || !(SharedPrefs().isAuthentication())) {
       return SizedBox(
         height: 40,
@@ -35,13 +36,13 @@ class UserProfileTrailing extends HookConsumerWidget {
               borderRadius: BorderRadius.circular(100),
               child: CachedNetworkImage(
                 imageUrl: user.image,
-
                 fit: BoxFit.cover,
                 errorWidget: (context, error, stackTrace) {
                   return Container(
                     width: 40,
                     height: 40,
-                    color: context.appColors.btnDisable,
+                    color: context.appColors.light,
+                    child: MyAssets.images.allmember.image(),
                   );
                 },
               ),

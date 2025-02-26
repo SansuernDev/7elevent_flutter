@@ -190,6 +190,24 @@ final customerSelectStateProvider =
 );
 
 typedef _$CustomerSelectState = Notifier<CustomerModel?>;
+String _$customerProductTopBuyStateHash() =>
+    r'4bf039c4f939c84dcd720034f850cc325baa4ca4';
+
+/// See also [CustomerProductTopBuyState].
+@ProviderFor(CustomerProductTopBuyState)
+final customerProductTopBuyStateProvider = AutoDisposeAsyncNotifierProvider<
+    CustomerProductTopBuyState, List<ProductModel>>.internal(
+  CustomerProductTopBuyState.new,
+  name: r'customerProductTopBuyStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$customerProductTopBuyStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$CustomerProductTopBuyState
+    = AutoDisposeAsyncNotifier<List<ProductModel>>;
 String _$marketProductSelectStateHash() =>
     r'c3690d1aee119ea7cd8b21da9d9fa707b0e726d0';
 
@@ -208,12 +226,12 @@ final marketProductSelectStateProvider = NotifierProvider<
 
 typedef _$MarketProductSelectState = Notifier<List<MarketProductCardModel>>;
 String _$marketProductListStateHash() =>
-    r'dc79f8a60bab775ff2f9368f349c3b8301ff96de';
+    r'87628efe2eed376400d5151b3bdedfcf8d8b42bf';
 
 /// See also [MarketProductListState].
 @ProviderFor(MarketProductListState)
-final marketProductListStateProvider =
-    AsyncNotifierProvider<MarketProductListState, List<ProductModel>>.internal(
+final marketProductListStateProvider = AutoDisposeAsyncNotifierProvider<
+    MarketProductListState, List<ProductModel>>.internal(
   MarketProductListState.new,
   name: r'marketProductListStateProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -223,13 +241,13 @@ final marketProductListStateProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$MarketProductListState = AsyncNotifier<List<ProductModel>>;
+typedef _$MarketProductListState = AutoDisposeAsyncNotifier<List<ProductModel>>;
 String _$marketCustomerListStateHash() =>
-    r'63fe6418134f6dad5fb5f0c6fe673a25e10d0e03';
+    r'dc114bdd04f9c0b2cbfedd39ac0d85327be51509';
 
 /// See also [MarketCustomerListState].
 @ProviderFor(MarketCustomerListState)
-final marketCustomerListStateProvider = AsyncNotifierProvider<
+final marketCustomerListStateProvider = AutoDisposeAsyncNotifierProvider<
     MarketCustomerListState, List<CustomerModel>>.internal(
   MarketCustomerListState.new,
   name: r'marketCustomerListStateProvider',
@@ -240,6 +258,39 @@ final marketCustomerListStateProvider = AsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$MarketCustomerListState = AsyncNotifier<List<CustomerModel>>;
+typedef _$MarketCustomerListState
+    = AutoDisposeAsyncNotifier<List<CustomerModel>>;
+String _$orderListStateHash() => r'99a4b1105f9ac7b52d30f8b9c2ed9d42be8c0c83';
+
+/// See also [OrderListState].
+@ProviderFor(OrderListState)
+final orderListStateProvider =
+    AutoDisposeAsyncNotifierProvider<OrderListState, List<OrderModel>>.internal(
+  OrderListState.new,
+  name: r'orderListStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$orderListStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$OrderListState = AutoDisposeAsyncNotifier<List<OrderModel>>;
+String _$memberListStateHash() => r'f8bee639f252f0f5140ef7df945c663fd79841ac';
+
+/// See also [MemberListState].
+@ProviderFor(MemberListState)
+final memberListStateProvider =
+    AutoDisposeAsyncNotifierProvider<MemberListState, List<UserModel>>.internal(
+  MemberListState.new,
+  name: r'memberListStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$memberListStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$MemberListState = AutoDisposeAsyncNotifier<List<UserModel>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

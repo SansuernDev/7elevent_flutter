@@ -127,7 +127,9 @@ class __$$ResponseProductModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ResponseProductModelImpl implements _ResponseProductModel {
+class _$ResponseProductModelImpl
+    with DiagnosticableTreeMixin
+    implements _ResponseProductModel {
   _$ResponseProductModelImpl(
       {required this.page,
       required this.limit,
@@ -150,8 +152,18 @@ class _$ResponseProductModelImpl implements _ResponseProductModel {
   }
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'ResponseProductModel(page: $page, limit: $limit, data: $data)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ResponseProductModel'))
+      ..add(DiagnosticsProperty('page', page))
+      ..add(DiagnosticsProperty('limit', limit))
+      ..add(DiagnosticsProperty('data', data));
   }
 
   @override
@@ -356,7 +368,7 @@ class __$$ProductModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ProductModelImpl implements _ProductModel {
+class _$ProductModelImpl with DiagnosticableTreeMixin implements _ProductModel {
   _$ProductModelImpl(
       {required this.productId,
       required this.imageUrl,
@@ -380,8 +392,20 @@ class _$ProductModelImpl implements _ProductModel {
   final DateTime createdAt;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'ProductModel(productId: $productId, imageUrl: $imageUrl, name: $name, price: $price, createdAt: $createdAt)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ProductModel'))
+      ..add(DiagnosticsProperty('productId', productId))
+      ..add(DiagnosticsProperty('imageUrl', imageUrl))
+      ..add(DiagnosticsProperty('name', name))
+      ..add(DiagnosticsProperty('price', price))
+      ..add(DiagnosticsProperty('createdAt', createdAt));
   }
 
   @override

@@ -20,6 +20,7 @@ mixin _$PaginatedStatus {
   TResult when<TResult extends Object?>({
     required TResult Function() done,
     required TResult Function() fetchingMore,
+    required TResult Function() noMore,
     required TResult Function(Object? e, StackTrace? stack) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -27,6 +28,7 @@ mixin _$PaginatedStatus {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? done,
     TResult? Function()? fetchingMore,
+    TResult? Function()? noMore,
     TResult? Function(Object? e, StackTrace? stack)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -34,6 +36,7 @@ mixin _$PaginatedStatus {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? done,
     TResult Function()? fetchingMore,
+    TResult Function()? noMore,
     TResult Function(Object? e, StackTrace? stack)? error,
     required TResult orElse(),
   }) =>
@@ -42,6 +45,7 @@ mixin _$PaginatedStatus {
   TResult map<TResult extends Object?>({
     required TResult Function(_Done value) done,
     required TResult Function(_FetchingMore value) fetchingMore,
+    required TResult Function(_NoMore value) noMore,
     required TResult Function(_Error value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -49,6 +53,7 @@ mixin _$PaginatedStatus {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Done value)? done,
     TResult? Function(_FetchingMore value)? fetchingMore,
+    TResult? Function(_NoMore value)? noMore,
     TResult? Function(_Error value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -56,6 +61,7 @@ mixin _$PaginatedStatus {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Done value)? done,
     TResult Function(_FetchingMore value)? fetchingMore,
+    TResult Function(_NoMore value)? noMore,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) =>
@@ -125,6 +131,7 @@ class _$DoneImpl implements _Done {
   TResult when<TResult extends Object?>({
     required TResult Function() done,
     required TResult Function() fetchingMore,
+    required TResult Function() noMore,
     required TResult Function(Object? e, StackTrace? stack) error,
   }) {
     return done();
@@ -135,6 +142,7 @@ class _$DoneImpl implements _Done {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? done,
     TResult? Function()? fetchingMore,
+    TResult? Function()? noMore,
     TResult? Function(Object? e, StackTrace? stack)? error,
   }) {
     return done?.call();
@@ -145,6 +153,7 @@ class _$DoneImpl implements _Done {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? done,
     TResult Function()? fetchingMore,
+    TResult Function()? noMore,
     TResult Function(Object? e, StackTrace? stack)? error,
     required TResult orElse(),
   }) {
@@ -159,6 +168,7 @@ class _$DoneImpl implements _Done {
   TResult map<TResult extends Object?>({
     required TResult Function(_Done value) done,
     required TResult Function(_FetchingMore value) fetchingMore,
+    required TResult Function(_NoMore value) noMore,
     required TResult Function(_Error value) error,
   }) {
     return done(this);
@@ -169,6 +179,7 @@ class _$DoneImpl implements _Done {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Done value)? done,
     TResult? Function(_FetchingMore value)? fetchingMore,
+    TResult? Function(_NoMore value)? noMore,
     TResult? Function(_Error value)? error,
   }) {
     return done?.call(this);
@@ -179,6 +190,7 @@ class _$DoneImpl implements _Done {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Done value)? done,
     TResult Function(_FetchingMore value)? fetchingMore,
+    TResult Function(_NoMore value)? noMore,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -236,6 +248,7 @@ class _$FetchingMoreImpl implements _FetchingMore {
   TResult when<TResult extends Object?>({
     required TResult Function() done,
     required TResult Function() fetchingMore,
+    required TResult Function() noMore,
     required TResult Function(Object? e, StackTrace? stack) error,
   }) {
     return fetchingMore();
@@ -246,6 +259,7 @@ class _$FetchingMoreImpl implements _FetchingMore {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? done,
     TResult? Function()? fetchingMore,
+    TResult? Function()? noMore,
     TResult? Function(Object? e, StackTrace? stack)? error,
   }) {
     return fetchingMore?.call();
@@ -256,6 +270,7 @@ class _$FetchingMoreImpl implements _FetchingMore {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? done,
     TResult Function()? fetchingMore,
+    TResult Function()? noMore,
     TResult Function(Object? e, StackTrace? stack)? error,
     required TResult orElse(),
   }) {
@@ -270,6 +285,7 @@ class _$FetchingMoreImpl implements _FetchingMore {
   TResult map<TResult extends Object?>({
     required TResult Function(_Done value) done,
     required TResult Function(_FetchingMore value) fetchingMore,
+    required TResult Function(_NoMore value) noMore,
     required TResult Function(_Error value) error,
   }) {
     return fetchingMore(this);
@@ -280,6 +296,7 @@ class _$FetchingMoreImpl implements _FetchingMore {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Done value)? done,
     TResult? Function(_FetchingMore value)? fetchingMore,
+    TResult? Function(_NoMore value)? noMore,
     TResult? Function(_Error value)? error,
   }) {
     return fetchingMore?.call(this);
@@ -290,6 +307,7 @@ class _$FetchingMoreImpl implements _FetchingMore {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Done value)? done,
     TResult Function(_FetchingMore value)? fetchingMore,
+    TResult Function(_NoMore value)? noMore,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -302,6 +320,123 @@ class _$FetchingMoreImpl implements _FetchingMore {
 
 abstract class _FetchingMore implements PaginatedStatus {
   const factory _FetchingMore() = _$FetchingMoreImpl;
+}
+
+/// @nodoc
+abstract class _$$NoMoreImplCopyWith<$Res> {
+  factory _$$NoMoreImplCopyWith(
+          _$NoMoreImpl value, $Res Function(_$NoMoreImpl) then) =
+      __$$NoMoreImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$NoMoreImplCopyWithImpl<$Res>
+    extends _$PaginatedStatusCopyWithImpl<$Res, _$NoMoreImpl>
+    implements _$$NoMoreImplCopyWith<$Res> {
+  __$$NoMoreImplCopyWithImpl(
+      _$NoMoreImpl _value, $Res Function(_$NoMoreImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PaginatedStatus
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$NoMoreImpl implements _NoMore {
+  const _$NoMoreImpl();
+
+  @override
+  String toString() {
+    return 'PaginatedStatus.noMore()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$NoMoreImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() done,
+    required TResult Function() fetchingMore,
+    required TResult Function() noMore,
+    required TResult Function(Object? e, StackTrace? stack) error,
+  }) {
+    return noMore();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? done,
+    TResult? Function()? fetchingMore,
+    TResult? Function()? noMore,
+    TResult? Function(Object? e, StackTrace? stack)? error,
+  }) {
+    return noMore?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? done,
+    TResult Function()? fetchingMore,
+    TResult Function()? noMore,
+    TResult Function(Object? e, StackTrace? stack)? error,
+    required TResult orElse(),
+  }) {
+    if (noMore != null) {
+      return noMore();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Done value) done,
+    required TResult Function(_FetchingMore value) fetchingMore,
+    required TResult Function(_NoMore value) noMore,
+    required TResult Function(_Error value) error,
+  }) {
+    return noMore(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Done value)? done,
+    TResult? Function(_FetchingMore value)? fetchingMore,
+    TResult? Function(_NoMore value)? noMore,
+    TResult? Function(_Error value)? error,
+  }) {
+    return noMore?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Done value)? done,
+    TResult Function(_FetchingMore value)? fetchingMore,
+    TResult Function(_NoMore value)? noMore,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (noMore != null) {
+      return noMore(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _NoMore implements PaginatedStatus {
+  const factory _NoMore() = _$NoMoreImpl;
 }
 
 /// @nodoc
@@ -380,6 +515,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() done,
     required TResult Function() fetchingMore,
+    required TResult Function() noMore,
     required TResult Function(Object? e, StackTrace? stack) error,
   }) {
     return error(e, stack);
@@ -390,6 +526,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? done,
     TResult? Function()? fetchingMore,
+    TResult? Function()? noMore,
     TResult? Function(Object? e, StackTrace? stack)? error,
   }) {
     return error?.call(e, stack);
@@ -400,6 +537,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? done,
     TResult Function()? fetchingMore,
+    TResult Function()? noMore,
     TResult Function(Object? e, StackTrace? stack)? error,
     required TResult orElse(),
   }) {
@@ -414,6 +552,7 @@ class _$ErrorImpl implements _Error {
   TResult map<TResult extends Object?>({
     required TResult Function(_Done value) done,
     required TResult Function(_FetchingMore value) fetchingMore,
+    required TResult Function(_NoMore value) noMore,
     required TResult Function(_Error value) error,
   }) {
     return error(this);
@@ -424,6 +563,7 @@ class _$ErrorImpl implements _Error {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Done value)? done,
     TResult? Function(_FetchingMore value)? fetchingMore,
+    TResult? Function(_NoMore value)? noMore,
     TResult? Function(_Error value)? error,
   }) {
     return error?.call(this);
@@ -434,6 +574,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Done value)? done,
     TResult Function(_FetchingMore value)? fetchingMore,
+    TResult Function(_NoMore value)? noMore,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {

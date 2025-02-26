@@ -93,7 +93,6 @@ class MarketPanel extends HookConsumerWidget {
             Expanded(
               child: HookConsumer(
                 builder: (context, ref, child) {
-
                   final text = useListenableSelector(
                     marketSearchController,
                     () => marketSearchController.text,
@@ -122,7 +121,7 @@ class MarketPanel extends HookConsumerWidget {
                       children: [
                         Expanded(
                           child: RefreshIndicator(
-                            onRefresh: ()  async {
+                            onRefresh: () async {
                               ref.invalidate(marketCustomerListStateProvider);
                             },
                             child: ListView.separated(
@@ -193,20 +192,50 @@ class MarketPanel extends HookConsumerWidget {
                       ),
                       Gap(16),
                       Text(
-                        "รายการที่ซื้อบ่อย",
+                        "รายการที่ซื้อบ่อย 5 อันดับ",
                         style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
                       ),
                       Gap(8),
                       SizedBox(
                         height: 70,
-                        child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return MarketProductHit();
-                            },
-                            separatorBuilder: (context, index) => Gap(8),
-                            itemCount: 4),
+                        child: Consumer(
+                          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                            final state = ref.watch(customerProductTopBuyStateProvider);
+                            final topProduct = state.asData?.value ?? [];
+
+                            if (topProduct.isEmpty) {
+                              return Center(
+                                child: Text(
+                                  "ไม่พบสินค้าที่ซื้อบ่อย",
+                                  style: context.textTheme.bodyLarge?.copyWith(color: context.appColors.subTitle),
+                                ),
+                              );
+                            }
+                            return ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final queryTopProduct = topProduct[index];
+                                return MarketProductHit(
+                                  onTap: () {
+                                    ref.read(marketProductSelectStateProvider.notifier).add(MarketProductCardModel(
+                                      productId: queryTopProduct.productId,
+                                      name: queryTopProduct.name,
+                                      price: queryTopProduct.price,
+                                      amount: 1,
+                                      imageUrl: queryTopProduct.imageUrl
+                                    ));
+                                  },
+                                  name: queryTopProduct.name,
+                                  price: queryTopProduct.price,
+                                  imageUrl: queryTopProduct.imageUrl,
+                                );
+                              },
+                              separatorBuilder: (context, index) => Gap(8),
+                              itemCount: topProduct.length,
+                            );
+                          },
+                        ),
                       ),
                       Gap(16),
                       Consumer(
@@ -294,8 +323,8 @@ class MarketPanel extends HookConsumerWidget {
                                     style: context.textTheme.bodyLarge?.copyWith(color: context.appColors.subTitle),
                                   )),
                                   Text(
-                                    formatNumberToPrice(summary.getTotalPrice),
-                                    style: context.textTheme.labelLarge,
+                                    "฿ ${formatNumberToPrice(summary.getTotalPrice)}",
+                                    style: context.textTheme.displaySmall?.apply(color: context.appColors.primary),
                                   ),
                                 ],
                               ),
@@ -309,8 +338,12 @@ class MarketPanel extends HookConsumerWidget {
                                 height: 42,
                                 onPressed: () {
                                   if (!enable) return;
-                                  List<IBasketProductPayload> productIds = product.map((e) => IBasketProductPayload(productId: e.productId, amount: e.amount),).toList();
-                                  final memberId = ref.read(userStateProvider)?.memberId ?? "";
+                                  List<IBasketProductPayload> productIds = product
+                                      .map(
+                                        (e) => IBasketProductPayload(productId: e.productId, amount: e.amount),
+                                      )
+                                      .toList();
+                                  final memberId = ref.read(userStateProvider).asData?.value?.memberId ?? "";
                                   final payload = IBasketPayload(customerId: customer.customerId, memberId: memberId, total: summary.getTotalPrice, productIds: productIds);
                                   EasyDebounce.debounce(marketCustomerListState, const Duration(milliseconds: 200), () async {
                                     ref.read(mainControllerProvider).marketSubmitOrder(payload);
@@ -371,12 +404,11 @@ class EmptySearch extends StatelessWidget {
   }
 }
 
-
 class CustomerCreateDialog extends HookConsumerWidget {
   const CustomerCreateDialog({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ValueNotifier<UploadFileResponse?> imageFile = useState(null);
     final nameController = useTextEditingController();
     final phoneController = useTextEditingController();
@@ -443,24 +475,25 @@ class CustomerCreateDialog extends HookConsumerWidget {
                     builder: (context) {
                       final nameText = useListenableSelector(
                         nameController,
-                            () => nameController.text,
+                        () => nameController.text,
                       );
                       final phone = useListenableSelector(
                         phoneController,
-                            () => phoneController.text,
+                        () => phoneController.text,
                       );
                       final allmember = useListenableSelector(
                         phoneAllMemberController,
-                            () => phoneAllMemberController.text,
+                        () => phoneAllMemberController.text,
                       );
                       final address = useListenableSelector(
                         addressController,
-                            () => addressController.text,
+                        () => addressController.text,
                       );
+                      final isLoading = ref.watch(appLoadingIndicatorProvider(key: createCustomerKey)) is AsyncLoading;
+                      final enable = nameText.isNotEmpty && phone.isNotEmpty && allmember.isNotEmpty && address.isNotEmpty && !isLoading;
 
-
-                      final enable = nameText.isNotEmpty && phone.isNotEmpty && allmember.isNotEmpty  && address.isNotEmpty ;
                       return AppButton(
+                        isLoading: isLoading,
                         enable: enable,
                         backgroundColor: context.appColors.secondary,
                         textColor: Colors.white,
@@ -468,14 +501,9 @@ class CustomerCreateDialog extends HookConsumerWidget {
                         height: 42,
                         onPressed: () {
                           if (!enable) return;
-                          ref.read(mainControllerProvider).createCustomer(ICustomerPayload(
-                            name: nameText,
-                            phoneNumber: phone,
-                            allMemberNumber: allmember,
-                            address: address
-                          ));
+                          ref.read(mainControllerProvider).createCustomer(ICustomerPayload(name: nameText, phoneNumber: phone, allMemberNumber: allmember, address: address));
                         },
-                        text: "สร้างสินค้า",
+                        text: "เพิ่มรายชื่อใหม่",
                       );
                     },
                   ),

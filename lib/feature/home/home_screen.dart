@@ -11,6 +11,7 @@ import 'package:sevent_elevent/core/constant/constant.dart';
 import 'package:sevent_elevent/core/dio_manager.dart';
 import 'package:sevent_elevent/core/model/user_model.dart';
 import 'package:sevent_elevent/core/share_prefs.dart';
+import 'package:sevent_elevent/core/state/main_state.dart';
 import 'package:sevent_elevent/core/state/user_state.dart';
 import 'package:sevent_elevent/core/widgets/app_button.dart';
 import 'package:sevent_elevent/core/widgets/appbar.dart';
@@ -36,11 +37,7 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: DefaultAppBar(
-        useTap: false,
-        title: branchName,
-        trailing: UserProfileTrailing(),
-      ),
+      appBar: MainAppBar(),
       body: WrapBackground(
         child: SingleChildScrollView(
           child: Column(
@@ -49,7 +46,7 @@ class HomeScreen extends HookConsumerWidget {
             children: [
               _buildSectionOne(context, ref),
               Gap(40),
-              _buildSectionTwo(context),
+              _buildSectionTwo(context, ref),
               Gap(40),
               _buildSectionThree(context),
             ],
@@ -83,24 +80,19 @@ class HomeScreen extends HookConsumerWidget {
                           Row(
                             children: [
                               Container(
-                                decoration:BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                    width: 5,
-                                    color: context.appColors.primary
-                                  )
-                                ),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), border: Border.all(width: 5, color: context.appColors.primary)),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                   child: CachedNetworkImage(
-                                    imageUrl: user?.image ?? "",
+                                    imageUrl: user.asData?.value?.image ?? "",
                                     width: 120,
                                     height: 120,
                                     fit: BoxFit.cover,
                                     errorWidget: (context, url, error) => Container(
                                       width: 120,
                                       height: 120,
-                                      color: Colors.black38,
+                                      color: context.appColors.light,
+                                      child: MyAssets.images.allmember.image(),
                                     ),
                                   ),
                                 ),
@@ -111,7 +103,7 @@ class HomeScreen extends HookConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "ยินดีต้อนรับ\nสมาชิกคุณ ${user?.name ?? ""} เข้าสู่ระบบแล้ว !",
+                                    "ยินดีต้อนรับ\nสมาชิกคุณ ${user.asData?.value?.name ?? ""} เข้าสู่ระบบแล้ว !",
                                     style: context.textTheme.labelLarge,
                                   ),
                                   Gap(18),
@@ -183,56 +175,62 @@ class HomeScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildSectionTwo(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      // height: 1.sh * .8,
-      padding: EdgeInsets.all(60),
-      color: Color(0xFFFE9901),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Opacity(
-              opacity: .2,
-              child: MyAssets.images.a7eleven.image(),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildSectionTwo(BuildContext context, WidgetRef ref) {
+    return Consumer(
+      builder: (context, ref, child) {
+       final state =  ref.watch(topMemberPointStateProvider);
+       print("state $state");
+       return Container(
+          width: double.infinity,
+          // height: 1.sh * .8,
+          padding: EdgeInsets.all(60),
+          color: Color(0xFFFE9901),
+          child: Stack(
             children: [
-              Row(
+              Positioned.fill(
+                child: Opacity(
+                  opacity: .2,
+                  child: MyAssets.images.a7eleven.image(),
+                ),
+              ),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "TOPSALE",
-                    style: context.textTheme.displayLarge?.copyWith(color: Color(0xFFD11F22), fontWeight: FontWeight.w900, fontSize: 60),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "TOPSALE",
+                        style: context.textTheme.displayLarge?.copyWith(color: Color(0xFFD11F22), fontWeight: FontWeight.w900, fontSize: 60),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              Gap(4),
-              Text("THIS WEEK", style: context.textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 40)),
-              Gap(40),
-              PromotionInfo(
-                width: 400,
-              ),
-              Gap(24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                  Gap(4),
+                  Text("THIS WEEK", style: context.textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 40)),
+                  Gap(40),
                   PromotionInfo(
-                    width: 350,
+                    width: 400,
                   ),
                   Gap(24),
-                  PromotionInfo(
-                    width: 350,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PromotionInfo(
+                        width: 350,
+                      ),
+                      Gap(24),
+                      PromotionInfo(
+                        width: 350,
+                      ),
+                    ],
                   ),
                 ],
-              ),
+              )
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 

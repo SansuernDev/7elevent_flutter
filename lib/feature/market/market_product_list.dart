@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get_common/get_reset.dart';
 import 'package:get/get_utils/src/extensions/export.dart';
@@ -97,7 +99,7 @@ class MarketProductList extends HookConsumerWidget {
                         data: (data) {
                           return SliverGrid.builder(
                             itemCount: data.length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: .78),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: .75),
                             itemBuilder: (context, index) {
                               ref.watch(marketProductListStateProvider.notifier).checkRequestMoreData(index);
                               final query = data[index];
@@ -134,9 +136,9 @@ class MarketProductList extends HookConsumerWidget {
   _buildLoading() {
     return Skeletonizer.sliver(
       enabled: true,
-      containersColor: Colors.grey.shade200,
+      // containersColor: Colors.grey.shade200,
       child: SliverGrid.builder(
-        itemCount: 8,
+        itemCount: 20,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: .8),
         itemBuilder: (context, index) {
           return MarketProductCard(
@@ -189,6 +191,7 @@ class ProductCreateDialog extends HookConsumerWidget {
               hintText: 'ราคา',
               controller: priceController,
               textInputType: TextInputType.number,
+              inputFormatter: [FilteringTextInputFormatter.digitsOnly],
             ),
             Gap(40),
             Row(
@@ -223,8 +226,11 @@ class ProductCreateDialog extends HookConsumerWidget {
                         () => imageFile.value,
                       );
 
-                      final enable = nameText.isNotEmpty && price.isNotEmpty && image != null;
+                      final isLoading = ref.watch(appLoadingIndicatorProvider(key: createProductKey)) is AsyncLoading;
+
+                      final enable = nameText.isNotEmpty && price.isNotEmpty && image != null && !isLoading;
                       return AppButton(
+                        isLoading: isLoading,
                         enable: enable,
                         backgroundColor: context.appColors.secondary,
                         textColor: Colors.white,

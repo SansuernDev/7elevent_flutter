@@ -7,7 +7,7 @@ part of 'bottom_paginated_indicator.dart';
 // **************************************************************************
 
 String _$bottomPaginatedIndicatorHash() =>
-    r'c64271535d92246725be1f2f9d1fe7d09a12a1a1';
+    r'269af0a6ae36efd977b680f6146ae5f8d98387fb';
 
 /// Copied from Dart SDK
 class _SystemHash {

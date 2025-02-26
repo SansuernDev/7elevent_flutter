@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,8 +28,8 @@ import 'package:sevent_elevent/gen/assets.gen.dart';
 
 import '../../core/constant/constant.dart';
 
-class OrderScreen extends HookConsumerWidget {
-  const OrderScreen({super.key});
+class MemberScreen extends HookConsumerWidget {
+  const MemberScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,17 +50,17 @@ class OrderScreen extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "ประวัติออเดอร์",
+                  "รายชื่อสมาชิกในระบบ",
                   style: context.textTheme.labelLarge?.copyWith(fontSize: 20),
                 ),
                 Gap(20),
                 SizedBox(
                   width: 400,
                   child: TextFieldWithCancel(
-                    hintText: "ค้นหาสินค้า",
+                    hintText: "ค้นหาชื่อสมาชิก",
                     onChanged: (value) {
                       EasyDebounce.debounce(orderListState, const Duration(milliseconds: 500), () async {
-                        ref.read(marketSearchStateProvider(key: orderListState).notifier).update(value);
+                        ref.read(marketSearchStateProvider(key: memberListState).notifier).update(value);
                       });
                     },
                     controller: controller,
@@ -94,37 +95,29 @@ class OrderScreen extends HookConsumerWidget {
                           child: Text("ลำดับที่", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Container(
+                          width: 120,
+                          padding: EdgeInsets.all(8),
+                          child: Text("รูปภาพ", style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Container(
                           width: 160,
                           padding: EdgeInsets.all(8),
-                          child: Text("ชื่อลูกค้า", style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text("ชื่อสมาชิก", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Container(
                           width: 120,
                           padding: EdgeInsets.all(8),
-                          child: Text("ยอดรวม", style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text("คะแนนสะสม (P)", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Container(
                           width: 160,
                           padding: EdgeInsets.all(8),
-                          child: Text("ชื่อพนักงาน", style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text("รหัสสมาชิก", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Container(
                           width: 160,
                           padding: EdgeInsets.all(8),
-                          child: Text("เลขออเดอร์", style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                        Container(
-                          width: 160,
-                          padding: EdgeInsets.all(8),
-                          child: Text("วันที่สั่งซื้อ", style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Container(
-                              padding: EdgeInsets.all(8),
-                              child: Text("จัดการ", style: TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                          ),
+                          child: Text("วันที่สร้าง", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -132,13 +125,13 @@ class OrderScreen extends HookConsumerWidget {
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {
-                        ref.invalidate(orderListStateProvider);
+                        ref.invalidate(memberListStateProvider);
                       },
                       child: CustomScrollView(
                         slivers: [
                           Consumer(
                             builder: (context, ref, child) {
-                              final state = ref.watch(orderListStateProvider);
+                              final state = ref.watch(memberListStateProvider);
                               return state.when(
                                 data: (data) {
                                   return SliverList.builder(
@@ -147,7 +140,7 @@ class OrderScreen extends HookConsumerWidget {
                                         final query = data[index];
                                         final numberIndex = query.id;
 
-                                        ref.read(orderListStateProvider.notifier).checkRequestMoreData(index);
+                                        ref.read(memberListStateProvider.notifier).checkRequestMoreData(index);
                                         return Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                           decoration: BoxDecoration(
@@ -161,55 +154,56 @@ class OrderScreen extends HookConsumerWidget {
                                               Container(
                                                 width: 80,
                                                 padding: EdgeInsets.all(8),
-                                                child: Text(formatNumberToPrice(numberIndex), style: TextStyle(fontWeight: FontWeight.bold)),
+                                                child: Text(formatNumberToPrice(numberIndex ?? 0), style: TextStyle(fontWeight: FontWeight.bold)),
+                                              ),
+                                              SizedBox(
+                                                width: 120,
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width: 60,
+                                                      height: 60,
+                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), border: Border.all(width: 2, color: context.appColors.primary)),
+                                                      child: ClipRRect(
+                                                        borderRadius: BorderRadius.circular(100),
+                                                        child: CachedNetworkImage(
+                                                          imageUrl: query.image,
+                                                          fit: BoxFit.cover,
+                                                          errorWidget: (context, error, stackTrace) {
+                                                            return Container(
+                                                              width: 60,
+                                                              height: 60,
+                                                              color: context.appColors.light,
+                                                              child: MyAssets.images.allmember.image(),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                               Container(
                                                 width: 160,
                                                 padding: EdgeInsets.all(8),
-                                                child: Text(query.customer.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                                                child: Text(query.name, style: TextStyle(fontWeight: FontWeight.bold)),
                                               ),
                                               Container(
                                                 width: 120,
                                                 padding: EdgeInsets.all(8),
-                                                child: Text(formatNumberToPrice(query.total), style: TextStyle(fontWeight: FontWeight.bold)),
+                                                child: Text(formatNumberToPrice(query.point), style: TextStyle(fontWeight: FontWeight.bold)),
                                               ),
                                               Container(
                                                 width: 160,
                                                 padding: EdgeInsets.all(8),
-                                                child: Text(query.member.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                                              ),
-                                              Container(
-                                                width: 160,
-                                                padding: EdgeInsets.all(8),
-                                                child: Text(query.orderId, style: TextStyle(fontWeight: FontWeight.bold)),
+                                                child: Text(query.username, style: TextStyle(fontWeight: FontWeight.bold)),
                                               ),
                                               Container(
                                                 width: 160,
                                                 padding: EdgeInsets.all(8),
                                                 child: Text(getDateAndTimeStringFormatted(query.createdAt), style: TextStyle(fontWeight: FontWeight.bold)),
-                                              ),
-                                              Expanded(
-                                                child: Container(
-                                                    padding: EdgeInsets.all(8),
-                                                    child: Center(
-                                                      child: AppButton(
-                                                        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                                                        backgroundColor: context.appColors.primary,
-                                                        textColor: Colors.white,
-                                                        onPressed: () {
-                                                          showDialog(
-                                                            useSafeArea: true,
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return OrderDetailDialog(
-                                                                data: query,
-                                                              );
-                                                            },
-                                                          );
-                                                        },
-                                                        text: "รายละเอียด",
-                                                      ),
-                                                    )),
                                               ),
                                             ],
                                           ),
