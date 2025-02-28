@@ -62,8 +62,8 @@ class MainDataSource {
     required Period period,
   }) {
     return networkManager.get(
-      '/member/top/point?period=${period.name}',
-      appBaseUrl: baseUrl,
+      '/home/top/point?period=${period.name}',
+      appBaseUrl: appBaseUrl,
     );
   }
 

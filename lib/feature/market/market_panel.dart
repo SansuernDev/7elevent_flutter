@@ -17,6 +17,7 @@ import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
 import 'package:sevent_elevent/core/state/market_state.dart';
 import 'package:sevent_elevent/core/state/user_state.dart';
 import 'package:sevent_elevent/core/utils/number.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 import 'package:sevent_elevent/core/widgets/app_button.dart';
 import 'package:sevent_elevent/core/widgets/app_text_field.dart';
 import 'package:sevent_elevent/core/widgets/image_upload_widget.dart';
@@ -46,12 +47,13 @@ class MarketPanel extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             Row(
               children: [
                 Expanded(
                   child: Text(
                     "ตะกร้าของฉัน",
-                    style: context.textTheme.labelLarge?.copyWith(fontSize: 20),
+                    style: context.textTheme.labelLarge,
                   ),
                 ),
                 Align(
@@ -87,7 +89,7 @@ class MarketPanel extends HookConsumerWidget {
             Gap(14),
             Text(
               "ข้อมูลลูกค้า",
-              style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
+              style: context.textTheme.bodyLarge?.copyWith(color: context.appColors.subTitle),
             ),
             Gap(8),
             Expanded(
@@ -193,7 +195,7 @@ class MarketPanel extends HookConsumerWidget {
                       Gap(16),
                       Text(
                         "รายการที่ซื้อบ่อย 5 อันดับ",
-                        style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
+                        style: context.textTheme.bodyLarge?.copyWith(color: context.appColors.subTitle),
                       ),
                       Gap(8),
                       SizedBox(
@@ -212,6 +214,7 @@ class MarketPanel extends HookConsumerWidget {
                               );
                             }
                             return ListView.separated(
+                              padding: EdgeInsets.zero,
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
@@ -396,7 +399,7 @@ class EmptySearch extends StatelessWidget {
           Gap(4),
           Text(
             "กรุณาค้นหาข้อมูลลูกค้า",
-            style: context.textTheme.bodyLarge?.apply(color: context.appColors.subTitle),
+            style: context.textTheme.bodyLarge?.copyWith(color: context.appColors.subTitle),
           ),
         ],
       )),

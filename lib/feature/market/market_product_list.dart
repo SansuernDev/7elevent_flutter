@@ -20,6 +20,7 @@ import 'package:sevent_elevent/core/model/product_model.dart';
 import 'package:sevent_elevent/core/routes.dart';
 import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
 import 'package:sevent_elevent/core/state/market_state.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 import 'package:sevent_elevent/core/widgets/app_button.dart';
 import 'package:sevent_elevent/core/widgets/app_loading_text.dart';
 import 'package:sevent_elevent/core/widgets/app_text_field.dart';

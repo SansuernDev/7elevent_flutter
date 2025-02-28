@@ -13,6 +13,9 @@ import 'package:sevent_elevent/core/model/user_model.dart';
 import 'package:sevent_elevent/core/share_prefs.dart';
 import 'package:sevent_elevent/core/state/main_state.dart';
 import 'package:sevent_elevent/core/state/user_state.dart';
+import 'package:sevent_elevent/core/type/main_type.dart';
+import 'package:sevent_elevent/core/utils/date.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 import 'package:sevent_elevent/core/widgets/app_button.dart';
 import 'package:sevent_elevent/core/widgets/appbar.dart';
 import 'package:sevent_elevent/core/widgets/user_profile_trailing.dart';
@@ -176,61 +179,140 @@ class HomeScreen extends HookConsumerWidget {
   }
 
   Widget _buildSectionTwo(BuildContext context, WidgetRef ref) {
-    return Consumer(
-      builder: (context, ref, child) {
-       final state =  ref.watch(topMemberPointStateProvider);
-       print("state $state");
-       return Container(
-          width: double.infinity,
-          // height: 1.sh * .8,
-          padding: EdgeInsets.all(60),
-          color: Color(0xFFFE9901),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Opacity(
-                  opacity: .2,
-                  child: MyAssets.images.a7eleven.image(),
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "TOPSALE",
-                        style: context.textTheme.displayLarge?.copyWith(color: Color(0xFFD11F22), fontWeight: FontWeight.w900, fontSize: 60),
-                      ),
-                    ],
-                  ),
-                  Gap(4),
-                  Text("THIS WEEK", style: context.textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 40)),
-                  Gap(40),
-                  PromotionInfo(
-                    width: 400,
-                  ),
-                  Gap(24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      PromotionInfo(
-                        width: 350,
-                      ),
-                      Gap(24),
-                      PromotionInfo(
-                        width: 350,
-                      ),
-                    ],
-                  ),
-                ],
-              )
-            ],
+    return Container(
+      color: Color(0xFFFE9901),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: .2,
+              child: MyAssets.images.a7eleven.image(),
+            ),
           ),
-        );
-      },
+          Container(
+            height: 1200,
+            width: double.infinity,
+            padding: EdgeInsets.all(60),
+            child:  Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Consumer(builder: (context, ref, child) {
+                  final period = ref.watch(topMemberSelectPeriodStateProvider);
+                  return Column(
+                    children: [
+                      Text("TOP 5 SALE OF ${period.getTitle}",
+                          style: context.textTheme.displayMedium?.copyWith(color: Color(0xFFD11F22), fontWeight: FontWeight.w900, fontSize: 44)),
+                      Gap(14),
+                      AppButton(
+                        height: 52,
+                        width: 180,
+                        onPressed: () async {
+                          final value = await showModalBottomSheet<Period?>(
+                            useSafeArea: true,
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                            ),
+                            builder: (context) {
+                              return SizedBox(
+                                width: double.infinity,
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ...Period.values.map(
+                                            (e) {
+                                          return InkWell(
+                                            onTap: () {
+                                              context.pop(e);
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(14),
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                child: Center(
+                                                  child: Text(
+                                                    e.getName,
+                                                    style: context.textTheme.bodyLarge,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+
+                          if (value != null) {
+                            ref.read(topMemberSelectPeriodStateProvider.notifier).update(value);
+                          }
+                        },
+                        text: "เลือก${period.getName}",
+                        backgroundColor: context.appColors.light,
+                        textColor: context.appColors.black,
+                        borderColor: context.appColors.black.withOpacity(.5),
+                        borderWidth: 1,
+                      )
+                    ],
+                  );
+                }),
+                Gap(16),
+                Consumer(
+                  builder: (context, ref, child) {
+                    final state = ref.watch(topMemberPointStateProvider);
+                    return state.when(
+                      data: (data) {
+                        final member = data.topMembers;
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Gap(14),
+                              Text("แสดงผลตั้งแต่วันที่ ${getDateAndTimeStringFormatted(data.startDate).split(",").first} - ${getDateAndTimeStringFormatted(data.endDate).split(",").first}",
+                                  style: context.textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 24)),
+                              Gap(14),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ...List.generate(
+                                    member.length,
+                                        (index) {
+                                      return PromotionInfo(
+                                        index: index,
+                                        data: member[index],
+                                        width: 480,
+                                      );
+                                    },
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      error: (error, stackTrace) {
+                        return SizedBox();
+                      },
+                      loading: () {
+                        return SizedBox();
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+
+        ],
+      ),
     );
   }
 

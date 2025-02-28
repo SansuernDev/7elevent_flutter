@@ -16,8 +16,12 @@ class UserState extends _$UserState {
   @override
   Future<UserModel?> build() async {
     final UserModel? data = SharedPrefs().getTokenData;
-    final res = await ref.watch(mainDataSourceProvider).getMemberById(memberId: data?.memberId ?? "");
-    return UserModel.fromJson(res);
+    if (data != null) {
+      final res = await ref.watch(mainDataSourceProvider).getMemberById(memberId: data?.memberId ?? "");
+      return UserModel.fromJson(res);
+    }
+
+    return null;
   }
 
   void setUser(UserModel user) {
