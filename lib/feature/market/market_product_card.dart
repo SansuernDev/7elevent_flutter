@@ -7,6 +7,7 @@ import 'package:get/get_utils/src/extensions/export.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/utils/number.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 import 'package:sevent_elevent/core/widgets/animation_button.dart';
 import 'package:sevent_elevent/feature/authentication/login_screen.dart';
 import 'package:sevent_elevent/gen/assets.gen.dart';
@@ -37,20 +38,25 @@ class MarketProductCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                    child: CachedNetworkImage(
+                      height: responsiveSize(
+                        context: context,
+                        onSmaller: () => 120,
+                        onSmall: () => 120,
+                        onBigger: () => 160,
+                        onBiggest: () => 120,
                       ),
-                      image: imageUrl.isEmpty
-                          ? null
-                          : DecorationImage(
-                              image: CachedNetworkImageProvider(imageUrl),
-                              fit: BoxFit.cover,
-                            ),
+                      width: double.infinity,
+                      imageUrl: imageUrl,
+                      fit: BoxFit.cover,
+                      errorWidget: (context, url, error) {
+                        return MyAssets.images.allmember.image(fit: BoxFit.cover);
+                      },
                     ),
                   ),
                   Padding(
@@ -107,22 +113,19 @@ class MarketProductCard extends StatelessWidget {
   }
 }
 
-
 class MarketProductHit extends StatelessWidget {
   final String imageUrl;
   final String name;
   final num price;
   final void Function() onTap;
-  const MarketProductHit({super.key, required this.imageUrl, required this.name, required this.price,required this.onTap });
+  const MarketProductHit({super.key, required this.imageUrl, required this.name, required this.price, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        constraints: BoxConstraints(
-          minWidth: 200
-        ),
+        constraints: BoxConstraints(minWidth: 200),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -135,20 +138,16 @@ class MarketProductHit extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                image: imageUrl.isEmpty
-                    ? null
-                    : DecorationImage(
-                  image: CachedNetworkImageProvider(imageUrl),
-                  fit: BoxFit.cover,
-                ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: CachedNetworkImage(
+                // height: 60,
+                // width: 60,
+                imageUrl: imageUrl,
+                errorWidget: (context, url, error) {
+                  return MyAssets.images.allmember.image(fit: BoxFit.cover);
+                },
               ),
-              child: MyAssets.images.allmember.image(fit: BoxFit.cover),
             ),
             Gap(8),
             Text(
@@ -276,6 +275,13 @@ class ProductCardSelected extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = responsiveSize(
+      context: context,
+      onSmaller: () => 34,
+      onSmall: () => 34,
+      onBigger: () => 60,
+      onBiggest: () => 60,
+    );
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -289,20 +295,14 @@ class ProductCardSelected extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              image: imageUrl.isEmpty
-                  ? null
-                  : DecorationImage(
-                image: CachedNetworkImageProvider(imageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-            // child: MyAssets.images.allmember.image(fit: BoxFit.cover),
+          CachedNetworkImage(
+            height: size,
+            width: size,
+            imageUrl: imageUrl,
+            fit: BoxFit.cover,
+            errorWidget: (context, url, error) {
+              return MyAssets.images.allmember.image(fit: BoxFit.cover);
+            },
           ),
           Gap(12),
           Expanded(
@@ -330,7 +330,6 @@ class ProductCardSelected extends StatelessWidget {
     );
   }
 }
-
 
 String mobileNumberDisplayText({
   required String mobileNumber,

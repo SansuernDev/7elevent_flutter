@@ -40,9 +40,21 @@ class MarketPanel extends HookConsumerWidget {
         border: Border(left: BorderSide(width: 1, color: context.appColors.border)),
       ),
       height: 1.sh,
-      width: 400,
+      width: responsiveSize(
+        context: context,
+        onSmaller: () => 340,
+        onSmall: () => 340,
+        onBigger: () => 400,
+        onBiggest: () => 400,
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 16),
+        padding:  EdgeInsets.symmetric(vertical: responsiveSize(
+          context: context,
+          onSmaller: () => 16,
+          onSmall: () => 16,
+          onBigger: () => 28,
+          onBiggest: () => 28,
+        ), horizontal: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +211,13 @@ class MarketPanel extends HookConsumerWidget {
                       ),
                       Gap(8),
                       SizedBox(
-                        height: 70,
+                        height: responsiveSize(
+                          context: context,
+                          onSmaller: () => 70,
+                          onSmall: () => 44,
+                          onBigger: () => 70,
+                          onBiggest: () => 70,
+                        ),
                         child: Consumer(
                           builder: (BuildContext context, WidgetRef ref, Widget? child) {
                             final state = ref.watch(customerProductTopBuyStateProvider);
@@ -386,7 +404,13 @@ class EmptySearch extends StatelessWidget {
         ),
       ),
       width: double.infinity,
-      height: 154,
+      height:  responsiveSize(
+      context: context,
+      onSmaller: () => 90,
+      onSmall: () => 90,
+      onBigger: () => 154,
+      onBiggest: () => 154,
+    ),
       child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -14,6 +14,7 @@ import 'package:sevent_elevent/core/app_loading.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/controller/main_controller.dart';
 import 'package:sevent_elevent/core/routes.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 import 'package:sevent_elevent/core/widgets/app_button.dart';
 import 'package:sevent_elevent/core/widgets/app_text_field.dart';
 import 'package:sevent_elevent/core/widgets/wrap_background.dart';
@@ -61,9 +62,8 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
                     Gap(24),
                     AppTextField(
                       label: "password",
-                      hintText: 'password'  ,
+                      hintText: 'password',
                       controller: passwordController,
-
                     ),
                     Gap(24),
                     SizedBox(
@@ -147,9 +147,9 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
                                     InkWell(
                                       onTap: () async {
                                         final res = await ref.read(mainControllerProvider).uploadImage();
-                                          setState(() {
-                                            imageFile = res;
-                                          });
+                                        setState(() {
+                                          imageFile = res;
+                                        });
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),

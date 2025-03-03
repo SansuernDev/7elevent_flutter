@@ -16,6 +16,7 @@ import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
 import 'package:sevent_elevent/core/state/market_state.dart';
 import 'package:sevent_elevent/core/utils/date.dart';
 import 'package:sevent_elevent/core/utils/number.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 import 'package:sevent_elevent/core/widgets/app_button.dart';
 import 'package:sevent_elevent/core/widgets/app_text_field.dart';
 import 'package:sevent_elevent/core/widgets/appbar.dart';
@@ -51,7 +52,7 @@ class MemberScreen extends HookConsumerWidget {
               children: [
                 Text(
                   "รายชื่อสมาชิกในระบบ",
-                  style: context.textTheme.labelLarge?.copyWith(fontSize: 20),
+                  style: context.textTheme.labelLarge?.copyWith(fontSize: isMacbook ? 18 : 20),
                 ),
                 Gap(20),
                 SizedBox(

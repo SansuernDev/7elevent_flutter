@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 
 class AppButton extends StatelessWidget {
   final Color? backgroundColor;
@@ -23,54 +24,51 @@ class AppButton extends StatelessWidget {
   final double? elevation;
   final Color? shadowColor;
 
-  const AppButton({
-    super.key,
-    this.backgroundColor,
-    this.width,
-    this.height,
-    this.borderColor,
-    this.text,
-    this.child,
-    this.margin,
-    this.padding,
-    this.radius,
-    this.textColor,
-    this.fontSize,
-    this.isLoading,
-    this.borderWidth,
-    this.enable = true,
-    required this.onPressed,
-    this.textStyle,
-    this.disableBorderColor,
-    this.disableBackgroundColor,
-    this.elevation = 0,
-    this.shadowColor
-  });
+  const AppButton(
+      {super.key,
+      this.backgroundColor,
+      this.width,
+      this.height,
+      this.borderColor,
+      this.text,
+      this.child,
+      this.margin,
+      this.padding,
+      this.radius,
+      this.textColor,
+      this.fontSize,
+      this.isLoading,
+      this.borderWidth,
+      this.enable = true,
+      required this.onPressed,
+      this.textStyle,
+      this.disableBorderColor,
+      this.disableBackgroundColor,
+      this.elevation = 0,
+      this.shadowColor});
 
-  const AppButton.primary({
-    super.key,
-    this.backgroundColor,
-    this.width,
-    this.height,
-    this.borderColor,
-    this.text,
-    this.child,
-    this.margin,
-    this.padding,
-    this.radius,
-    this.textColor,
-    this.fontSize,
-    this.isLoading,
-    this.borderWidth,
-    this.enable = true,
-    required this.onPressed,
-    this.textStyle,
-    this.disableBorderColor,
-    this.disableBackgroundColor,
-    this.elevation,
-    this.shadowColor
-  });
-
+  const AppButton.primary(
+      {super.key,
+      this.backgroundColor,
+      this.width,
+      this.height,
+      this.borderColor,
+      this.text,
+      this.child,
+      this.margin,
+      this.padding,
+      this.radius,
+      this.textColor,
+      this.fontSize,
+      this.isLoading,
+      this.borderWidth,
+      this.enable = true,
+      required this.onPressed,
+      this.textStyle,
+      this.disableBorderColor,
+      this.disableBackgroundColor,
+      this.elevation,
+      this.shadowColor});
 
   Widget loading() {
     return const SizedBox(
@@ -83,7 +81,7 @@ class AppButton extends StatelessWidget {
   Widget textWidget() {
     return Text(
       text ?? "",
-      style: textStyle ?? TextStyle(color: textColor, fontSize: fontSize ?? 14),
+      style: textStyle ?? TextStyle(color: textColor, fontSize: isMacbook ? 12 : 14),
       maxLines: 1,
     );
   }

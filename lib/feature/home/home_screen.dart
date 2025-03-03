@@ -193,7 +193,7 @@ class HomeScreen extends HookConsumerWidget {
             height: 1200,
             width: double.infinity,
             padding: EdgeInsets.all(60),
-            child:  Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -223,7 +223,7 @@ class HomeScreen extends HookConsumerWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       ...Period.values.map(
-                                            (e) {
+                                        (e) {
                                           return InkWell(
                                             onTap: () {
                                               context.pop(e);
@@ -275,7 +275,8 @@ class HomeScreen extends HookConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Gap(14),
-                              Text("แสดงผลตั้งแต่วันที่ ${getDateAndTimeStringFormatted(data.startDate).split(",").first} - ${getDateAndTimeStringFormatted(data.endDate).split(",").first}",
+                              Text(
+                                  "แสดงผลตั้งแต่วันที่ ${getDateAndTimeStringFormatted(data.startDate).split(",").first} - ${getDateAndTimeStringFormatted(data.endDate).split(",").first}",
                                   style: context.textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 24)),
                               Gap(14),
                               Column(
@@ -284,7 +285,7 @@ class HomeScreen extends HookConsumerWidget {
                                 children: [
                                   ...List.generate(
                                     member.length,
-                                        (index) {
+                                    (index) {
                                       return PromotionInfo(
                                         index: index,
                                         data: member[index],
@@ -310,7 +311,6 @@ class HomeScreen extends HookConsumerWidget {
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -390,11 +390,21 @@ class HomeScreen extends HookConsumerWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: MyAssets.images.appStore.image(width: 200),
+                            child: InkWell(
+                              onTap: () {
+                                openLink('https://apps.apple.com/th/app/7-eleven-th/id514262377');
+                              },
+                              child: MyAssets.images.appStore.image(width: 200),
+                            ),
                           ),
                           Gap(14),
                           Expanded(
-                            child: MyAssets.images.googlePlayBadge.image(width: 300),
+                            child: InkWell(
+                              onTap: () {
+                                openLink('https://play.google.com/store/apps/details?id=asuk.com.android.app&pcampaignid=web_share');
+                              },
+                              child: MyAssets.images.googlePlayBadge.image(width: 300),
+                            ),
                           ),
                         ],
                       )

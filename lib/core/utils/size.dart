@@ -9,6 +9,32 @@ enum Responsive {
   macBook;
 }
 
+bool isMacbook = 1.sw >= 1400; // MacBook หรือ Laptop ขนาดใหญ่
 
+double responsiveSize({
+  required double Function() onSmaller,
+  required double Function() onSmall,
+  required double Function() onBigger,
+  required double Function() onBiggest,
+  required BuildContext context,
+}) {
+  double screenWidth = MediaQuery.of(context).size.width;
 
-bool isMacbook = 1.sh >= 700; // MacBook หรือ Laptop ขนาดใหญ่
+  if (screenWidth > 1200 && screenWidth < 1400) {
+    return onSmaller.call();
+  }
+
+  if (screenWidth > 1400 && screenWidth < 1600) {
+    return onSmall.call();
+  }
+
+  if (screenWidth > 1600 && screenWidth < 1800) {
+    return onBigger.call();
+  }
+
+  if (screenWidth > 1800) {
+    return onBiggest.call();
+  }
+
+  return onSmaller.call();
+}

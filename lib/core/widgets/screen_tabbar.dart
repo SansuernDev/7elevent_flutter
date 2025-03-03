@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/share_prefs.dart';
 import 'package:sevent_elevent/core/state/user_state.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 import 'package:sevent_elevent/feature/authentication/login_controller.dart';
 
 class ScreenTabBar extends StatefulHookConsumerWidget {
@@ -39,6 +40,9 @@ class _TabBarScreenState extends ConsumerState<ScreenTabBar> {
 
   @override
   Widget build(BuildContext context) {
+    final double padding = 12;
+    final double iconSize = isMacbook ? 20 : 24;
+    final double iconSizeSelected = isMacbook ? 14 :18;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Row(
@@ -59,7 +63,8 @@ class _TabBarScreenState extends ConsumerState<ScreenTabBar> {
                   child: Consumer(
                     builder: (context, ref, child) {
                       ref.watch(userStateProvider);
-                      final double padding = 12;
+
+
                       return NavigationRail(
                         selectedIndex: selectedIndex,
                         onDestinationSelected: _onItemTapped,
@@ -71,18 +76,18 @@ class _TabBarScreenState extends ConsumerState<ScreenTabBar> {
                         unselectedIconTheme: IconThemeData(color: Color(0xFF636363)),
                         indicatorShape:  CircleBorder(
                         ),
-                        minWidth: 120,
+                        minWidth: isMacbook ? 40 : 120,
                         useIndicator: true,
                         backgroundColor: Color(0xFFFEFFFF),
                         destinations: [
                           NavigationRailDestination(
                               icon: Icon(
                                 Icons.home_outlined,
-                                size: 24,
+                                size: iconSize,
                               ),
                               selectedIcon: Icon(
                                 Icons.home_filled,
-                                size: 18,
+                                size: iconSizeSelected,
                               ),
                               label: Text("หน้าแรก"),
                               padding: EdgeInsets.all(padding)),
@@ -90,33 +95,33 @@ class _TabBarScreenState extends ConsumerState<ScreenTabBar> {
                             NavigationRailDestination(
                                 icon: Icon(
                                   Icons.shopping_cart_outlined,
-                                  size: 24,
+                                  size: iconSize,
                                 ),
                                 selectedIcon: Icon(
                                   Icons.shopping_cart_rounded,
-                                  size: 18,
+                                  size: iconSizeSelected,
                                 ),
                                 label: Text("ตะกร้า"),
                                 padding: EdgeInsets.all(padding)),
                             NavigationRailDestination(
                                 icon: Icon(
                                   Icons.history_outlined,
-                                  size: 24,
+                                  size: iconSize,
                                 ),
                                 selectedIcon: Icon(
                                   Icons.history_rounded,
-                                  size: 18,
+                                  size: iconSizeSelected,
                                 ),
                                 label: Text("ประวัติการสั่งซื้อ"),
                                 padding: EdgeInsets.all(padding)),
                             NavigationRailDestination(
                                 icon: Icon(
                                   Icons.groups_outlined,
-                                  size: 24,
+                                  size: iconSize,
                                 ),
                                 selectedIcon: Icon(
                                   Icons.groups_rounded,
-                                  size: 18,
+                                  size: iconSizeSelected,
                                 ),
                                 label: Text("รายชื่อสมาชิก"),
                                 padding: EdgeInsets.all(padding)),
@@ -143,7 +148,7 @@ class _TabBarScreenState extends ConsumerState<ScreenTabBar> {
                         },
                         child: Icon(
                           Icons.logout_rounded,
-                          size: 24,
+                          size: iconSize,
                         ),
                       ),
                     );

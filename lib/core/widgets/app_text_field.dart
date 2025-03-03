@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 
 class AppTextField extends StatelessWidget {
   final bool autoFocus;
@@ -159,9 +160,9 @@ class AppTextField extends StatelessWidget {
                 ),
             hintStyle: context.textTheme.bodyMedium?.apply(color: context.appColors.secondaryText),
             contentPadding: contentPadding ??
-                const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8.5,
+                 EdgeInsets.symmetric(
+                  horizontal: isMacbook ? 14 :12,
+                  vertical: isMacbook ? 12 : 8.5,
                 ),
             filled: true,
             counterText: buildCounter != null ? null : "",

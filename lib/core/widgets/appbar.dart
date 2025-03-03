@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/constant/constant.dart';
 import 'package:sevent_elevent/core/widgets/user_profile_trailing.dart';
-
+import 'package:sevent_elevent/feature/authentication/login_screen.dart';
 
 class MainAppBar extends DefaultAppBar {
-  const MainAppBar({super.key,  super.title = branchName});
+  const MainAppBar({super.key, super.title = branchName});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,6 @@ class MainAppBar extends DefaultAppBar {
     );
   }
 }
-
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? height;
@@ -58,7 +58,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child:  Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(

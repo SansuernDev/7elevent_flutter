@@ -42,7 +42,7 @@ class MarketProductList extends HookConsumerWidget {
       child: Column(
         children: [
           Container(
-            height: 140,
+            height:  140,
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(width: 1, color: context.appColors.border),
@@ -64,12 +64,12 @@ class MarketProductList extends HookConsumerWidget {
                 ),
               ),
               SizedBox(
-                width: 300,
+                width: isMacbook ? 400 : 300,
               ),
               AppButton(
                 backgroundColor: context.appColors.primary,
                 textColor: Colors.white,
-                width: 200,
+                width: isMacbook ? 160 : 200,
                 height: 42,
                 onPressed: () {
                   showDialog(
@@ -100,7 +100,20 @@ class MarketProductList extends HookConsumerWidget {
                         data: (data) {
                           return SliverGrid.builder(
                             itemCount: data.length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: .75),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: responsiveSize(
+                                  context: context,
+                                  onSmaller: () => 4,
+                                  onSmall: () => 5,
+                                  onBigger: () => 5,
+                                  onBiggest: () => 6,
+                                ).toInt(), mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: responsiveSize(
+                                  context: context,
+                                  onSmaller: () => .75,
+                                  onSmall: () => .75,
+                                  onBigger: () => .8,
+                                  onBiggest: () => .95,
+                                )),
                             itemBuilder: (context, index) {
                               ref.watch(marketProductListStateProvider.notifier).checkRequestMoreData(index);
                               final query = data[index];
