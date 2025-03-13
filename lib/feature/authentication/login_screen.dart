@@ -64,6 +64,8 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
                       label: "password",
                       hintText: 'password',
                       controller: passwordController,
+                      textInputType: TextInputType.visiblePassword,
+                      obscureText: true,
                     ),
                     Gap(24),
                     SizedBox(

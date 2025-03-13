@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get/get.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -8,10 +9,10 @@ import 'package:sevent_elevent/core/model/market_model.dart';
 import 'package:sevent_elevent/core/model/product_model.dart';
 import 'package:sevent_elevent/core/model/user_model.dart';
 import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
+import 'package:sevent_elevent/core/type/main_type.dart';
+import 'package:sevent_elevent/core/widgets/app_toast.dart';
 
 part 'market_state.g.dart';
-
-
 
 @riverpod
 class MarketSearchState extends _$MarketSearchState {
@@ -52,7 +53,11 @@ class CustomerProductTopBuyState extends _$CustomerProductTopBuyState {
     final customer = ref.watch(customerSelectStateProvider);
     if ((customer?.customerId ?? "").isNotEmpty) {
       final response = await ref.read(mainDataSourceProvider).getCustomerWithProduct(customerId: customer?.customerId ?? "");
-      return (response as List).map((e) => ProductModel.fromJson(e),).toList();
+      return (response as List)
+          .map(
+            (e) => ProductModel.fromJson(e),
+          )
+          .toList();
     }
     return [];
   }
@@ -61,9 +66,6 @@ class CustomerProductTopBuyState extends _$CustomerProductTopBuyState {
     state = AsyncData([]);
   }
 }
-
-
-
 
 @Riverpod(keepAlive: true)
 class MarketProductSelectState extends _$MarketProductSelectState {
@@ -189,9 +191,6 @@ class MarketCustomerListState extends _$MarketCustomerListState {
   }
 }
 
-
-
-
 @riverpod
 class OrderListState extends _$OrderListState {
   num _page = 0;
@@ -205,7 +204,11 @@ class OrderListState extends _$OrderListState {
 
     final String phrase = ref.watch(marketSearchStateProvider(key: orderListState));
     final response = await ref.watch(mainDataSourceProvider).getOrders(page: _page, limit: _limit, phrase: phrase);
-    final data = (response['data'] as List).map((e) => OrderModel.fromJson(e),).toList();
+    final data = (response['data'] as List)
+        .map(
+          (e) => OrderModel.fromJson(e),
+        )
+        .toList();
     return data;
   }
 
@@ -225,7 +228,11 @@ class OrderListState extends _$OrderListState {
       _page = _page + 1;
       final String phrase = ref.watch(marketSearchStateProvider(key: orderListState));
       final response = await ref.watch(mainDataSourceProvider).getOrders(page: _page, limit: _limit, phrase: phrase);
-      final data = (response['data'] as List).map((e) => OrderModel.fromJson(e),).toList();
+      final data = (response['data'] as List)
+          .map(
+            (e) => OrderModel.fromJson(e),
+          )
+          .toList();
       state = AsyncData([...state.value!, ...data]);
       ref.read(bottomPaginatedIndicatorProvider(key: orderListState).notifier).hideLoading();
     } catch (e) {
@@ -233,7 +240,6 @@ class OrderListState extends _$OrderListState {
     }
   }
 }
-
 
 @riverpod
 class MemberListState extends _$MemberListState {
@@ -248,7 +254,11 @@ class MemberListState extends _$MemberListState {
 
     final String phrase = ref.watch(marketSearchStateProvider(key: memberListState));
     final response = await ref.watch(mainDataSourceProvider).getMembers(page: _page, limit: _limit, phrase: phrase);
-    final data = (response['data'] as List).map((e) => UserModel.fromJson(e),).toList();
+    final data = (response['data'] as List)
+        .map(
+          (e) => UserModel.fromJson(e),
+        )
+        .toList();
     return data;
   }
 
@@ -268,13 +278,34 @@ class MemberListState extends _$MemberListState {
       _page = _page + 1;
       final String phrase = ref.watch(marketSearchStateProvider(key: memberListState));
       final response = await ref.watch(mainDataSourceProvider).getMembers(page: _page, limit: _limit, phrase: phrase);
-      final data = (response['data'] as List).map((e) => UserModel.fromJson(e),).toList();
+      final data = (response['data'] as List)
+          .map(
+            (e) => UserModel.fromJson(e),
+          )
+          .toList();
       state = AsyncData([...state.value!, ...data]);
       ref.read(bottomPaginatedIndicatorProvider(key: memberListState).notifier).hideLoading();
     } catch (e) {
       ref.read(bottomPaginatedIndicatorProvider(key: memberListState).notifier).showError(e);
     }
   }
+
+  Future<void> updateRole({required String memberId, required RoleType role}) async {
+    EasyLoading.show();
+    try {
+      final res = await ref.read(mainDataSourceProvider).updateRoleByMemberId(memberId: memberId, role: role);
+      final convert = UserModel.fromJson(res);
+      state = AsyncData(state.value!
+          .map(
+            (e) => e.memberId == memberId ? convert : e,
+          )
+          .toList());
+      AppToastSuccessDialog(message: "แก้ไขบทบาทสำเร็จ");
+    } catch (e) {
+      print(e);
+      AppToastFailedDialog(message: "เกิดข้อผิดพลาดทางระบบ");
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
 }
-
-

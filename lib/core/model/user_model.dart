@@ -16,6 +16,7 @@ class UserModel with _$UserModel {
     required int point,
     DateTime? createdAt,
     String? accessToken,
+    required RoleType role
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

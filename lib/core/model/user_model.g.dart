@@ -19,6 +19,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['createdAt'] as String),
       accessToken: json['accessToken'] as String?,
+      role: $enumDecode(_$RoleTypeEnumMap, json['role']),
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
@@ -32,7 +33,13 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'point': instance.point,
       'createdAt': instance.createdAt?.toIso8601String(),
       'accessToken': instance.accessToken,
+      'role': _$RoleTypeEnumMap[instance.role]!,
     };
+
+const _$RoleTypeEnumMap = {
+  RoleType.manager: 'MANAGER',
+  RoleType.guest: 'GUEST',
+};
 
 _$TopMemberImpl _$$TopMemberImplFromJson(Map<String, dynamic> json) =>
     _$TopMemberImpl(
@@ -54,6 +61,7 @@ Map<String, dynamic> _$$TopMemberImplToJson(_$TopMemberImpl instance) =>
     };
 
 const _$PeriodEnumMap = {
+  Period.all: 'all',
   Period.weekly: 'weekly',
   Period.monthly: 'monthly',
   Period.yearly: 'yearly',

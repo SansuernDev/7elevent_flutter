@@ -14,6 +14,8 @@ import 'package:sevent_elevent/core/model/market_model.dart';
 import 'package:sevent_elevent/core/routes.dart';
 import 'package:sevent_elevent/core/state/bottom_paginated_indicator.dart';
 import 'package:sevent_elevent/core/state/market_state.dart';
+import 'package:sevent_elevent/core/state/user_state.dart';
+import 'package:sevent_elevent/core/type/main_type.dart';
 import 'package:sevent_elevent/core/utils/date.dart';
 import 'package:sevent_elevent/core/utils/number.dart';
 import 'package:sevent_elevent/core/utils/size.dart';
@@ -56,7 +58,7 @@ class MemberScreen extends HookConsumerWidget {
                 ),
                 Gap(20),
                 SizedBox(
-                  width: 400,
+                  width: 250,
                   child: TextFieldWithCancel(
                     hintText: "ค้นหาชื่อสมาชิก",
                     onChanged: (value) {
@@ -104,6 +106,11 @@ class MemberScreen extends HookConsumerWidget {
                           width: 160,
                           padding: EdgeInsets.all(8),
                           child: Text("ชื่อสมาชิก", style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Container(
+                          width: 160,
+                          padding: EdgeInsets.all(8),
+                          child: Text("บทบาท", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Container(
                           width: 120,
@@ -166,7 +173,8 @@ class MemberScreen extends HookConsumerWidget {
                                                     Container(
                                                       width: 60,
                                                       height: 60,
-                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), border: Border.all(width: 2, color: context.appColors.primary)),
+                                                      decoration:
+                                                          BoxDecoration(borderRadius: BorderRadius.circular(100), border: Border.all(width: 2, color: context.appColors.primary)),
                                                       child: ClipRRect(
                                                         borderRadius: BorderRadius.circular(100),
                                                         child: CachedNetworkImage(
@@ -191,6 +199,78 @@ class MemberScreen extends HookConsumerWidget {
                                                 padding: EdgeInsets.all(8),
                                                 child: Text(query.name, style: TextStyle(fontWeight: FontWeight.bold)),
                                               ),
+                                              Container(
+                                                  width: 160,
+                                                  padding: EdgeInsets.all(8),
+                                                  child: Consumer(
+                                                    builder: (context, ref, child) {
+                                                      final user = ref.watch(userStateProvider);
+                                                      return Row(
+                                                        children: [
+                                                          if (query.memberId == user.asData?.value?.memberId) ...[
+                                                            Text(query.role.getName, style: TextStyle(fontWeight: FontWeight.bold)),
+                                                          ] else ...[
+                                                            AppButton(
+                                                              height: 42,
+                                                              width: 90,
+                                                              onPressed: () async {
+                                                                final value = await showModalBottomSheet<RoleType?>(
+                                                                  useSafeArea: true,
+                                                                  context: context,
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                                                  ),
+                                                                  builder: (context) {
+                                                                    return SizedBox(
+                                                                      width: double.infinity,
+                                                                      child: Padding(
+                                                                        padding: EdgeInsets.all(16),
+                                                                        child: Column(
+                                                                          mainAxisSize: MainAxisSize.min,
+                                                                          children: [
+                                                                            ...RoleType.values.map(
+                                                                              (e) {
+                                                                                return InkWell(
+                                                                                  onTap: () {
+                                                                                    context.pop(e);
+                                                                                  },
+                                                                                  child: Padding(
+                                                                                    padding: const EdgeInsets.all(14),
+                                                                                    child: SizedBox(
+                                                                                      width: double.infinity,
+                                                                                      child: Center(
+                                                                                        child: Text(
+                                                                                          e.getName,
+                                                                                          style: context.textTheme.bodyLarge,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                );
+                                                                              },
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+
+                                                                if (value != null) {
+                                                                  ref.read(memberListStateProvider.notifier).updateRole(memberId: query.memberId, role: value);
+                                                                }
+                                                              },
+                                                              text: query.role.getName,
+                                                              backgroundColor: context.appColors.light,
+                                                              textColor: context.appColors.black,
+                                                              borderColor: context.appColors.black.withOpacity(.5),
+                                                              borderWidth: 1,
+                                                            ),
+                                                          ],
+                                                        ],
+                                                      );
+                                                    },
+                                                  )),
                                               Container(
                                                 width: 120,
                                                 padding: EdgeInsets.all(8),

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:sevent_elevent/core/appcolor_extension.dart';
 import 'package:sevent_elevent/core/model/user_model.dart';
 import 'package:sevent_elevent/core/utils/number.dart';
+import 'package:sevent_elevent/core/utils/size.dart';
 import 'package:sevent_elevent/gen/assets.gen.dart';
 
 class PromotionInfo extends StatelessWidget {
@@ -69,13 +70,25 @@ class PromotionInfo extends StatelessWidget {
                             "ชื่อสมาชิก ${data.name}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: context.textTheme.labelLarge?.copyWith(fontSize: 24),
+                            style: context.textTheme.labelLarge?.copyWith(fontSize: responsiveSize(
+                              context: context,
+                              onSmaller: () => 22,
+                              onSmall: () => 18,
+                              onBigger: () => 18,
+                              onBiggest: () => 18,
+                            )),
                           ),
                           Text(
                             "รหัสสมาชิก ${data.username}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: context.textTheme.bodyLarge?.copyWith(fontSize: 18),
+                            style: context.textTheme.bodyLarge?.copyWith(fontSize: responsiveSize(
+                              context: context,
+                              onSmaller: () => 18,
+                              onSmall: () => 14,
+                              onBigger: () => 14,
+                              onBiggest: () => 14,
+                            )),
                           ),
                         ],
                       ),
@@ -103,7 +116,13 @@ class PromotionInfo extends StatelessWidget {
                     ),
                     Text(
                       "${formatNumberToPrice(data.point)} P",
-                      style: context.textTheme.labelLarge?.copyWith(color: context.appColors.subPrimary,fontSize: 24),
+                      style: context.textTheme.labelLarge?.copyWith(color: context.appColors.subPrimary,fontSize: responsiveSize(
+                        context: context,
+                        onSmaller: () => 22,
+                        onSmall: () => 18,
+                        onBigger: () => 18,
+                        onBiggest: () => 18,
+                      )),
                     ),
                   ],
                 ),

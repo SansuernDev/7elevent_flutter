@@ -9,6 +9,7 @@ import 'package:sevent_elevent/core/datasource/main_datasource.dart';
 import 'package:sevent_elevent/core/model/user_model.dart';
 import 'package:sevent_elevent/core/share_prefs.dart';
 
+
 part 'user_state.g.dart';
 
 @Riverpod(keepAlive: true)
@@ -17,7 +18,7 @@ class UserState extends _$UserState {
   Future<UserModel?> build() async {
     final UserModel? data = SharedPrefs().getTokenData;
     if (data != null) {
-      final res = await ref.watch(mainDataSourceProvider).getMemberById(memberId: data?.memberId ?? "");
+      final res = await ref.watch(mainDataSourceProvider).getMemberById(memberId: data.memberId);
       return UserModel.fromJson(res);
     }
 
@@ -27,4 +28,7 @@ class UserState extends _$UserState {
   void setUser(UserModel user) {
     state = AsyncData(user);
   }
+
+
+
 }

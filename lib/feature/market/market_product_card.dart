@@ -141,8 +141,8 @@ class MarketProductHit extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: CachedNetworkImage(
-                // height: 60,
-                // width: 60,
+                height: 40,
+                width: 40,
                 imageUrl: imageUrl,
                 errorWidget: (context, url, error) {
                   return MyAssets.images.allmember.image(fit: BoxFit.cover);

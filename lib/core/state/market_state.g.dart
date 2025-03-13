@@ -276,7 +276,7 @@ final orderListStateProvider =
 );
 
 typedef _$OrderListState = AutoDisposeAsyncNotifier<List<OrderModel>>;
-String _$memberListStateHash() => r'f8bee639f252f0f5140ef7df945c663fd79841ac';
+String _$memberListStateHash() => r'30dcc95fca23eef811912f1ad41f86bbc5e494f2';
 
 /// See also [MemberListState].
 @ProviderFor(MemberListState)

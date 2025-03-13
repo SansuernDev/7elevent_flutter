@@ -19,7 +19,7 @@ class TopMemberPointState extends _$TopMemberPointState {
 class TopMemberSelectPeriodState extends _$TopMemberSelectPeriodState {
   @override
   Period build() {
-    return Period.weekly;
+    return Period.values.first;
   }
 
   update(Period value) {

@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http_parser/http_parser.dart';
@@ -11,7 +10,6 @@ import 'package:sevent_elevent/core/network_manager.dart';
 import 'package:sevent_elevent/core/type/main_type.dart';
 
 part 'main_datasource.g.dart';
-
 
 @Riverpod(keepAlive: true)
 MainDataSource mainDataSource(MainDataSourceRef ref) {
@@ -80,15 +78,12 @@ class MainDataSource {
 
   Future getCustomerWithProduct({
     required String customerId,
-
   }) {
     return networkManager.get(
       '/customer/product/$customerId',
       appBaseUrl: baseUrl,
     );
   }
-
-
 
   Future getMemberById({
     required String memberId,
@@ -97,6 +92,13 @@ class MainDataSource {
       '/member/$memberId',
       appBaseUrl: baseUrl,
     );
+  }
+
+  Future updateRoleByMemberId({
+    required String memberId,
+    required RoleType role,
+  }) {
+    return networkManager.post('/member/role/$memberId', appBaseUrl: baseUrl, data: {'role': role.name.toUpperCase()});
   }
 
   Future removeOrder({
@@ -118,8 +120,6 @@ class MainDataSource {
       appBaseUrl: baseUrl,
     );
   }
-
-
 
   Future createCustomer(ICustomerPayload payload) {
     return networkManager.post('/customer',

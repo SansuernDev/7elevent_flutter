@@ -201,7 +201,7 @@ class HomeScreen extends HookConsumerWidget {
                   final period = ref.watch(topMemberSelectPeriodStateProvider);
                   return Column(
                     children: [
-                      Text("TOP 5 SALE OF ${period.getTitle}",
+                      Text("TOP 5 SALE ${period == Period.all ? "" : "OF ${period.getTitle}"}",
                           style: context.textTheme.displayMedium?.copyWith(color: Color(0xFFD11F22), fontWeight: FontWeight.w900, fontSize: 44)),
                       Gap(14),
                       AppButton(

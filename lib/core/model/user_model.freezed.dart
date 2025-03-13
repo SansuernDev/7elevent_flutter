@@ -30,6 +30,7 @@ mixin _$UserModel {
   int get point => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get accessToken => throw _privateConstructorUsedError;
+  RoleType get role => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,7 +56,8 @@ abstract class $UserModelCopyWith<$Res> {
       @JsonKey(name: 'imageUrl') String image,
       int point,
       DateTime? createdAt,
-      String? accessToken});
+      String? accessToken,
+      RoleType role});
 }
 
 /// @nodoc
@@ -82,6 +84,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? point = null,
     Object? createdAt = freezed,
     Object? accessToken = freezed,
+    Object? role = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -120,6 +123,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.accessToken
           : accessToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as RoleType,
     ) as $Val);
   }
 }
@@ -141,7 +148,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
       @JsonKey(name: 'imageUrl') String image,
       int point,
       DateTime? createdAt,
-      String? accessToken});
+      String? accessToken,
+      RoleType role});
 }
 
 /// @nodoc
@@ -166,6 +174,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? point = null,
     Object? createdAt = freezed,
     Object? accessToken = freezed,
+    Object? role = null,
   }) {
     return _then(_$UserModelImpl(
       id: freezed == id
@@ -204,6 +213,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.accessToken
           : accessToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as RoleType,
     ));
   }
 }
@@ -220,7 +233,8 @@ class _$UserModelImpl implements _UserModel {
       @JsonKey(name: 'imageUrl') required this.image,
       required this.point,
       this.createdAt,
-      this.accessToken});
+      this.accessToken,
+      required this.role});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -244,10 +258,12 @@ class _$UserModelImpl implements _UserModel {
   final DateTime? createdAt;
   @override
   final String? accessToken;
+  @override
+  final RoleType role;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, memberId: $memberId, username: $username, password: $password, name: $name, image: $image, point: $point, createdAt: $createdAt, accessToken: $accessToken)';
+    return 'UserModel(id: $id, memberId: $memberId, username: $username, password: $password, name: $name, image: $image, point: $point, createdAt: $createdAt, accessToken: $accessToken, role: $role)';
   }
 
   @override
@@ -268,13 +284,14 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.accessToken, accessToken) ||
-                other.accessToken == accessToken));
+                other.accessToken == accessToken) &&
+            (identical(other.role, role) || other.role == role));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, memberId, username, password,
-      name, image, point, createdAt, accessToken);
+      name, image, point, createdAt, accessToken, role);
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -302,7 +319,8 @@ abstract class _UserModel implements UserModel {
       @JsonKey(name: 'imageUrl') required final String image,
       required final int point,
       final DateTime? createdAt,
-      final String? accessToken}) = _$UserModelImpl;
+      final String? accessToken,
+      required final RoleType role}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -326,6 +344,8 @@ abstract class _UserModel implements UserModel {
   DateTime? get createdAt;
   @override
   String? get accessToken;
+  @override
+  RoleType get role;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.

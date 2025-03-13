@@ -24,7 +24,7 @@ final topMemberPointStateProvider =
 
 typedef _$TopMemberPointState = AutoDisposeAsyncNotifier<TopMember>;
 String _$topMemberSelectPeriodStateHash() =>
-    r'aa031438f373aed0a9d29a28be188d017273d6cf';
+    r'29cde3cc771d2d7d6ca4d3671e53e65d8a6be3db';
 
 /// See also [TopMemberSelectPeriodState].
 @ProviderFor(TopMemberSelectPeriodState)
